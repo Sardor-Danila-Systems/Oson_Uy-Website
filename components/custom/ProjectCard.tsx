@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo, useState, useEffect } from "react";
-import { MapPin, Star, CheckCircle2, ChevronLeft, ChevronRight } from "lucide-react";
+import { MapPin, Star, CheckCircle2, ChevronLeft, ChevronRight, CreditCard } from "lucide-react";
 import { Project } from "@/types";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -156,6 +156,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
                             <span className="text-[10px] font-black uppercase tracking-widest text-emerald-700">{t("verifiedDeveloper")}</span>
                         </div>
                     )}
+
+                    {project.hasInstallment ? (
+                        <div className="flex items-center gap-2 bg-sky-50 w-fit px-3 py-1 rounded-full border border-sky-100">
+                            <CreditCard className="h-3.5 w-3.5 text-sky-600" />
+                            <span className="text-[10px] font-black uppercase tracking-widest text-sky-800">{t("installment")}</span>
+                        </div>
+                    ) : null}
 
                     <div className="flex items-center gap-2 text-sm">
                         <div className="flex items-center bg-orange-50 px-3 py-1 rounded-full border border-orange-100">

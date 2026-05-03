@@ -106,7 +106,8 @@
     "from": "from",
     "fromPerM2": "from / m²",
     "verifiedDeveloper": "Verified Developer",
-    "reviews": "reviews"
+    "reviews": "reviews",
+    "installment": "Installment"
   },
   "LeadModal": {
     "title": "Get In Touch",
@@ -147,7 +148,30 @@
     "noComment": "No comment",
     "qrTitle": "Project QR-code",
     "qrSubtitle": "Scan for quick access",
-    "close": "Close"
+    "close": "Close",
+    "leaveRequest": "Request a call",
+    "yes": "Yes",
+    "no": "No",
+    "specsTitle": "Building specs",
+    "installment": "Installment",
+    "materials": "Materials",
+    "buildingCount": "Buildings",
+    "corpusCount": "Blocks",
+    "ceilingHeight": "Ceiling height",
+    "metersShort": "m",
+    "parkingSurface": "Surface parking",
+    "parkingUnderground": "Underground parking",
+    "surfaceSpaces": "Surface spaces",
+    "undergroundSpaces": "Underground spaces",
+    "elevators": "Elevators",
+    "developerTitle": "Developer",
+    "developerAbout": "About the company",
+    "legalAddressLabel": "Legal address",
+    "officeAddressLabel": "Office",
+    "siblingsTitle": "More from this developer",
+    "nearbyTitle": "Nearby complexes",
+    "priceFromShort": "from",
+    "perM2": "m²"
   },
   "FloorTower": {
     "title": "Scale-model block",

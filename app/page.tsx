@@ -58,8 +58,14 @@ export default function Home() {
                     district: project.district || "",
                     developer: {
                         name: project.developer?.name ?? "Developer",
-                        verified: true,
-                        logo: "",
+                        verified: project.badgeVerified ?? false,
+                        logo: project.developer?.logoUrl ?? "",
+                        phone: project.developer?.phone,
+                        email: project.developer?.email,
+                        website: project.developer?.website,
+                        legalAddress: project.developer?.legalAddress,
+                        officeAddress: project.developer?.officeAddress,
+                        description: project.developer?.description,
                     },
                     deliveryDate: project.deliveryDate,
                     tags: [],
@@ -82,6 +88,7 @@ export default function Home() {
                     avgRating: project.avgRating ?? null,
                     reviewsCount: project.reviewsCount ?? 0,
                     plan: project.plan,
+                    hasInstallment: Boolean(project.hasInstallment),
                 }));
 
                 if (mapped.length) {
@@ -98,7 +105,7 @@ export default function Home() {
 
     return (
         <div className="-mt-16 flex min-h-screen w-full flex-col">
-            <section className="relative flex min-h-[98vh] items-center justify-center overflow-hidden pt-16 md:h-[92vh] md:pt-0">
+            <section className="relative flex min-h-[98vh] items-center justify-center overflow-hidden pt-20 md:h-[92vh] md:pt-12 lg:pt-14">
                 <div className="absolute inset-0 z-0">
                     <AnimatePresence mode="wait">
                         <motion.video
@@ -120,7 +127,7 @@ export default function Home() {
                     <div className="absolute inset-0 bg-gradient-to-b from-primary/90 via-transparent to-slate-50"></div>
                 </div>
 
-                <div className="relative pb-6 md:pt-7 md:pb-7 z-10 w-full px-4 text-center max-w-5xl mx-auto space-y-6 md:space-y-10 group">
+                <div className="relative z-10 mx-auto w-full max-w-5xl space-y-6 px-4 pb-6 pt-4 text-center md:space-y-10 md:pb-7 md:pt-6 lg:pt-8 group">
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}

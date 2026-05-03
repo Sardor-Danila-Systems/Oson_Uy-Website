@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
+import Link from "next/link";
+import type { LucideIcon } from "lucide-react";
 import {
     MapPin,
     ChevronDown,
@@ -9,8 +11,19 @@ import {
     Star,
     QrCode,
     ChevronLeft,
-    ChevronRight
+    ChevronRight,
+    CreditCard,
+    Layers,
+    Building2,
+    Ruler,
+    Car,
+    ArrowUpDown,
+    Phone,
+    Mail,
+    Globe,
 } from "lucide-react";
+import type { CatalogProjectPreview } from "@/types";
+import { formatUzsPerM2 } from "@/lib/currency";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { FloorTower } from "@/components/custom/FloorTower";
@@ -95,6 +108,75 @@ export default function ProjectDetailsPage({ params }: ProjectDetailsPageProps) 
             layouts: f.layouts ?? [],
         }));
     }, [projectData]);
+
+    const specRows = useMemo((): { Icon: LucideIcon; label: string; value: string }[] => {
+        if (!projectData) return [];
+        const rows: { Icon: LucideIcon; label: string; value: string }[] = [];
+        rows.push({
+            Icon: CreditCard,
+            label: t("installment"),
+            value: projectData.hasInstallment ? t("yes") : t("no"),
+        });
+        const materials = (projectData.materials ?? []) as string[];
+        if (materials.length) {
+            rows.push({
+                Icon: Layers,
+                label: t("materials"),
+                value: materials.join(", "),
+            });
+        }
+        if (projectData.buildingCount != null) {
+            rows.push({
+                Icon: Building2,
+                label: t("buildingCount"),
+                value: String(projectData.buildingCount),
+            });
+        }
+        if (projectData.corpusCount != null) {
+            rows.push({
+                Icon: Building2,
+                label: t("corpusCount"),
+                value: String(projectData.corpusCount),
+            });
+        }
+        if (projectData.ceilingHeightM != null) {
+            rows.push({
+                Icon: Ruler,
+                label: t("ceilingHeight"),
+                value: `${projectData.ceilingHeightM} ${t("metersShort")}`,
+            });
+        }
+        if (projectData.hasSurfaceParking || (projectData.surfaceParkingSpaces ?? 0) > 0) {
+            const extra =
+                projectData.surfaceParkingSpaces != null
+                    ? ` · ${t("surfaceSpaces")}: ${projectData.surfaceParkingSpaces}`
+                    : "";
+            rows.push({
+                Icon: Car,
+                label: t("parkingSurface"),
+                value: `${projectData.hasSurfaceParking ? t("yes") : t("no")}${extra}`,
+            });
+        }
+        if (projectData.hasUndergroundParking || (projectData.undergroundParkingSpaces ?? 0) > 0) {
+            const extra =
+                projectData.undergroundParkingSpaces != null
+                    ? ` · ${t("undergroundSpaces")}: ${projectData.undergroundParkingSpaces}`
+                    : "";
+            rows.push({
+                Icon: Car,
+                label: t("parkingUnderground"),
+                value: `${projectData.hasUndergroundParking ? t("yes") : t("no")}${extra}`,
+            });
+        }
+        if (projectData.elevatorsCount != null) {
+            rows.push({
+                Icon: ArrowUpDown,
+                label: t("elevators"),
+                value: String(projectData.elevatorsCount),
+            });
+        }
+        return rows;
+    }, [projectData, t]);
 
     if (loading) {
         return (
@@ -281,6 +363,18 @@ export default function ProjectDetailsPage({ params }: ProjectDetailsPageProps) 
                                         ))}
                                     </div>
                                 )}
+                                {projectData.materials?.length ? (
+                                    <div>
+                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">{t("materials")}</p>
+                                        <div className="flex flex-wrap gap-2">
+                                            {projectData.materials.map((m: string, i: number) => (
+                                                <span key={i} className="text-xs font-bold text-slate-700 bg-white border border-slate-100 rounded-lg px-3 py-1.5">
+                                                    {m}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ) : null}
                             </CollapsibleContent>
                         </Collapsible>
 
@@ -289,7 +383,7 @@ export default function ProjectDetailsPage({ params }: ProjectDetailsPageProps) 
                                 onClick={() => setIsLeadModalOpen(true)}
                                 className="flex-1 h-14 bg-[#F97316] hover:bg-orange-600 text-white font-black text-lg rounded-2xl shadow-xl shadow-orange-900/10 transition-all active:scale-[0.98] uppercase tracking-wider"
                             >
-                                {t("close") === "Close" ? "Request a Call" : "Оставить заявку"}
+                                {t("leaveRequest")}
                             </Button>
                             {projectData.qrCodeUrl && (
                                 <button
@@ -324,6 +418,96 @@ export default function ProjectDetailsPage({ params }: ProjectDetailsPageProps) 
                         </Button>
                     </DialogContent>
                 </Dialog>
+
+                {specRows.length > 0 ? (
+                    <div className="mb-10 rounded-[2.5rem] border border-slate-100 bg-white p-6 md:p-10 shadow-sm">
+                        <h2 className="text-xl md:text-2xl font-black text-[#1E3A8A] mb-6 uppercase tracking-tight">
+                            {t("specsTitle")}
+                        </h2>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+                            {specRows.map((row, idx) => (
+                                <div
+                                    key={`${row.label}-${idx}`}
+                                    className="flex items-start gap-3 rounded-2xl border border-slate-100 bg-slate-50/80 p-4"
+                                >
+                                    <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-[#1E3A8A] shadow-sm border border-slate-100">
+                                        <row.Icon className="h-5 w-5" />
+                                    </div>
+                                    <div className="min-w-0">
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{row.label}</p>
+                                        <p className="text-sm font-bold text-slate-900 mt-1 break-words">{row.value}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ) : null}
+
+                {(() => {
+                    const dev = projectData.developer;
+                    if (!dev?.name) return null;
+                    const web = (dev.website || "").trim();
+                    const webHref =
+                        !web ? "" : web.startsWith("http") ? web : `https://${web}`;
+                    return (
+                        <div className="mb-10 rounded-[2.5rem] border border-slate-100 bg-white p-6 md:p-10 shadow-sm">
+                            <h2 className="text-xl md:text-2xl font-black text-[#1E3A8A] mb-6 uppercase tracking-tight">
+                                {t("developerTitle")}
+                            </h2>
+                            <div className="flex flex-col gap-6 md:flex-row md:items-start">
+                                {dev.logoUrl ? (
+                                    <div className="shrink-0 rounded-2xl border border-slate-100 bg-slate-50 p-3">
+                                        <img src={dev.logoUrl} alt="" className="h-20 w-20 object-contain md:h-24 md:w-24" />
+                                    </div>
+                                ) : null}
+                                <div className="min-w-0 flex-1 space-y-4">
+                                    <p className="text-lg font-black text-slate-900">{dev.name}</p>
+                                    <div className="flex flex-col gap-2 text-sm">
+                                        {dev.phone ? (
+                                            <a href={`tel:${dev.phone.replace(/\s/g, "")}`} className="flex items-center gap-2 font-semibold text-[#1E3A8A] hover:underline">
+                                                <Phone className="h-4 w-4 shrink-0" />
+                                                {dev.phone}
+                                            </a>
+                                        ) : null}
+                                        {dev.email ? (
+                                            <a href={`mailto:${dev.email}`} className="flex items-center gap-2 font-semibold text-[#1E3A8A] hover:underline break-all">
+                                                <Mail className="h-4 w-4 shrink-0" />
+                                                {dev.email}
+                                            </a>
+                                        ) : null}
+                                        {webHref ? (
+                                            <a href={webHref} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 font-semibold text-[#1E3A8A] hover:underline break-all">
+                                                <Globe className="h-4 w-4 shrink-0" />
+                                                {web}
+                                            </a>
+                                        ) : null}
+                                        {dev.legalAddress ? (
+                                            <p className="text-slate-600">
+                                                <span className="font-bold text-slate-800">{t("legalAddressLabel")}: </span>
+                                                {dev.legalAddress}
+                                            </p>
+                                        ) : null}
+                                        {dev.officeAddress ? (
+                                            <p className="text-slate-600">
+                                                <span className="font-bold text-slate-800">{t("officeAddressLabel")}: </span>
+                                                {dev.officeAddress}
+                                            </p>
+                                        ) : null}
+                                    </div>
+                                    {dev.description ? (
+                                        <div>
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">{t("developerAbout")}</p>
+                                            <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line">{dev.description}</p>
+                                        </div>
+                                    ) : null}
+                                </div>
+                            </div>
+                        </div>
+                    );
+                })()}
+
+                <RelatedProjectsCarousel title={t("siblingsTitle")} items={projectData.siblingProjects as CatalogProjectPreview[] | undefined} />
+                <RelatedProjectsCarousel title={t("nearbyTitle")} items={projectData.nearbyProjects as CatalogProjectPreview[] | undefined} />
 
                 {projectData.media?.length > 0 && (
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10">
@@ -418,6 +602,102 @@ export default function ProjectDetailsPage({ params }: ProjectDetailsPageProps) 
                 projectId={projectData.id}
                 projectName={projectData.name}
             />
+        </div>
+    );
+}
+
+function RelatedProjectsCarousel({
+    title,
+    items,
+}: {
+    title: string;
+    items: CatalogProjectPreview[] | undefined;
+}) {
+    const t = useTranslations("ProjectDetails");
+    const [api, setApi] = useState<CarouselApi>();
+    const [current, setCurrent] = useState(0);
+    const [count, setCount] = useState(0);
+
+    useEffect(() => {
+        if (!api) return;
+        setCount(api.scrollSnapList().length);
+        setCurrent(api.selectedScrollSnap());
+        api.on("select", () => {
+            setCurrent(api.selectedScrollSnap());
+        });
+    }, [api]);
+
+    if (!items?.length) return null;
+
+    return (
+        <div className="mb-10 md:mb-12">
+            <h2 className="text-xl md:text-2xl font-black text-[#1E3A8A] mb-4 md:mb-6 uppercase tracking-tight">
+                {title}
+            </h2>
+            <Carousel setApi={setApi} opts={{ loop: false, align: "start" }} className="w-full">
+                <CarouselContent className="-ml-2 md:-ml-3">
+                    {items.map((p) => (
+                        <CarouselItem
+                            key={p.id}
+                            className="pl-2 md:pl-3 basis-full sm:basis-1/2 lg:basis-1/3"
+                        >
+                            <Link
+                                href={`/catalog/${p.id}`}
+                                className="block group h-full rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm hover:shadow-lg hover:border-slate-300 transition-all"
+                            >
+                                <div className="aspect-[16/10] bg-slate-100 overflow-hidden">
+                                    {p.imageUrl ? (
+                                        <img
+                                            src={p.imageUrl}
+                                            alt=""
+                                            className="h-full w-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
+                                        />
+                                    ) : null}
+                                </div>
+                                <div className="p-4">
+                                    <p className="font-black text-[#1E3A8A] uppercase tracking-tight text-sm leading-snug line-clamp-2 group-hover:text-orange-600 transition-colors">
+                                        {p.name}
+                                    </p>
+                                    <p className="text-xs text-slate-500 mt-1.5 font-medium line-clamp-1">
+                                        {[p.district, p.location].filter(Boolean).join(", ")}
+                                    </p>
+                                    <div className="flex flex-wrap items-center gap-2 mt-3">
+                                        {p.priceFrom != null && p.priceFrom > 0 ? (
+                                            <span className="text-xs font-black text-[#F97316]">
+                                                {t("priceFromShort")} {formatUzsPerM2(p.priceFrom)}/{t("perM2")}
+                                            </span>
+                                        ) : null}
+                                        {p.hasInstallment ? (
+                                            <span className="text-[10px] font-black uppercase tracking-wider text-sky-700 bg-sky-50 px-2 py-0.5 rounded-full border border-sky-100">
+                                                {t("installment")}
+                                            </span>
+                                        ) : null}
+                                    </div>
+                                    <p className="text-[10px] text-slate-400 font-bold uppercase mt-2 tracking-wide">
+                                        {p.deliveryDate}
+                                    </p>
+                                </div>
+                            </Link>
+                        </CarouselItem>
+                    ))}
+                </CarouselContent>
+                {count > 1 ? (
+                    <div className="flex justify-center gap-1.5 mt-4">
+                        {Array.from({ length: count }).map((_, i) => (
+                            <button
+                                key={i}
+                                type="button"
+                                aria-label={`Slide ${i + 1}`}
+                                onClick={() => api?.scrollTo(i)}
+                                className={cn(
+                                    "h-1.5 rounded-full transition-all duration-300",
+                                    current === i ? "w-6 bg-[#1E3A8A]" : "w-1.5 bg-slate-300 hover:bg-slate-400",
+                                )}
+                            />
+                        ))}
+                    </div>
+                ) : null}
+            </Carousel>
         </div>
     );
 }

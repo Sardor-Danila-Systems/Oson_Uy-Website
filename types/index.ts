@@ -25,17 +25,37 @@ export interface ProjectFloor {
   layouts: ProjectFloorLayout[];
 }
 
+export interface ProjectDeveloper {
+  name: string;
+  verified: boolean;
+  logo: string;
+  phone?: string | null;
+  email?: string | null;
+  website?: string | null;
+  legalAddress?: string | null;
+  officeAddress?: string | null;
+  description?: string | null;
+}
+
+/** Compact project row from API (sibling / nearby carousels). */
+export interface CatalogProjectPreview {
+  id: number;
+  name: string;
+  location: string;
+  district: string | null;
+  imageUrl: string;
+  deliveryDate: string;
+  hasInstallment: boolean;
+  priceFrom: number | null;
+}
+
 export interface Project {
   id: string;
   name: string;
   description: string;
   image: string;
   location: Location;
-  developer: {
-    name: string;
-    verified: boolean;
-    logo: string;
-  };
+  developer: ProjectDeveloper;
   deliveryDate: string;
   tags: string[];
   images: string[];
@@ -59,6 +79,7 @@ export interface Project {
   avgRating?: number | null;
   reviewsCount?: number;
   plan?: "START" | "PRO" | "PREMIUM" | "ULTIMATE";
+  hasInstallment?: boolean;
 }
 
 export interface FilterState {

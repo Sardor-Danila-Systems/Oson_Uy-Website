@@ -48,7 +48,7 @@ export default function Header() {
                 "supports-[backdrop-filter]:bg-white/45",
             )}
         >
-            <div className="container flex items-center justify-between md:grid md:grid-cols-[1fr_auto_1fr] w-full px-4 mx-auto">
+            <div className="container mx-auto flex w-full max-w-[1400px] items-center justify-between px-5 sm:px-6 md:grid md:grid-cols-[1fr_auto_1fr] lg:px-8">
                 {/* Mobile: Left | Desktop: Left */}
                 <Link href="/" className="flex items-center gap-2 order-1 md:order-1 transition-transform active:scale-95">
                     <Image src="/osonuy-logo-removebg-preview.png" alt="Oson Uy logo" width={40} height={40} className="h-9 w-9 md:h-10 md:w-10 object-contain" />

@@ -107,7 +107,13 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
         developer: {
           name: project.developer?.name ?? "Developer",
           verified: project.badgeVerified ?? false,
-          logo: "",
+          logo: project.developer?.logoUrl ?? "",
+          phone: project.developer?.phone,
+          email: project.developer?.email,
+          website: project.developer?.website,
+          legalAddress: project.developer?.legalAddress,
+          officeAddress: project.developer?.officeAddress,
+          description: project.developer?.description,
         },
         deliveryDate: project.deliveryDate,
         tags: [],
@@ -129,6 +135,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
         reviewsCount: project.reviewsCount ?? 0,
         plan: project.plan,
         floors: project.totalFloors || 0,
+        hasInstallment: Boolean(project.hasInstallment),
       };
 
       return mappedProject;

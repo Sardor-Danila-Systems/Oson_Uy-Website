@@ -106,7 +106,8 @@
     "from": "от",
     "fromPerM2": "от / м²",
     "verifiedDeveloper": "Проверенный застройщик",
-    "reviews": "отзывов"
+    "reviews": "отзывов",
+    "installment": "Рассрочка"
   },
   "LeadModal": {
     "title": "Свяжитесь с нами",
@@ -147,7 +148,30 @@
     "noComment": "Без комментария",
     "qrTitle": "QR-код проекта",
     "qrSubtitle": "Отсканируйте для быстрого доступа",
-    "close": "Закрыть"
+    "close": "Закрыть",
+    "leaveRequest": "Оставить заявку",
+    "yes": "Да",
+    "no": "Нет",
+    "specsTitle": "Характеристики ЖК",
+    "installment": "Рассрочка",
+    "materials": "Материалы",
+    "buildingCount": "Зданий",
+    "corpusCount": "Корпусов",
+    "ceilingHeight": "Высота потолков",
+    "metersShort": "м",
+    "parkingSurface": "Парковка надземная",
+    "parkingUnderground": "Парковка подземная",
+    "surfaceSpaces": "Мест (надземная)",
+    "undergroundSpaces": "Мест (подземная)",
+    "elevators": "Лифты",
+    "developerTitle": "Застройщик",
+    "developerAbout": "О компании",
+    "legalAddressLabel": "Юридический адрес",
+    "officeAddressLabel": "Офис / приёмная",
+    "siblingsTitle": "Другие проекты застройщика",
+    "nearbyTitle": "ЖК поблизости",
+    "priceFromShort": "от",
+    "perM2": "м²"
   },
   "FloorTower": {
     "title": "Макет дома",

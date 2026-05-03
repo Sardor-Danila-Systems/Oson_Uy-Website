@@ -106,7 +106,8 @@
     "from": "dan",
     "fromPerM2": "m² dan",
     "verifiedDeveloper": "Tasdiqlangan quruvchi",
-    "reviews": "sharhlar"
+    "reviews": "sharhlar",
+    "installment": "Muddatli to'lov"
   },
   "LeadModal": {
     "title": "Bog'lanish",
@@ -147,7 +148,30 @@
     "noComment": "Izohsiz",
     "qrTitle": "Loyiha QR-kodi",
     "qrSubtitle": "Tezkor kirish uchun skanerlang",
-    "close": "Yopish"
+    "close": "Yopish",
+    "leaveRequest": "So'rov qoldirish",
+    "yes": "Ha",
+    "no": "Yo'q",
+    "specsTitle": "JK xususiyatlari",
+    "installment": "Muddatli to'lov",
+    "materials": "Materiallar",
+    "buildingCount": "Binolar",
+    "corpusCount": "Korpuslar",
+    "ceilingHeight": "Shift balandligi",
+    "metersShort": "m",
+    "parkingSurface": "Yer usti avtoturargoh",
+    "parkingUnderground": "Yer osti avtoturargoh",
+    "surfaceSpaces": "Joylar (yer usti)",
+    "undergroundSpaces": "Joylar (yer osti)",
+    "elevators": "Liftlar",
+    "developerTitle": "Quruvchi",
+    "developerAbout": "Kompaniya haqida",
+    "legalAddressLabel": "Yuridik manzil",
+    "officeAddressLabel": "Ofis",
+    "siblingsTitle": "Shu quruvchining boshqa loyihalari",
+    "nearbyTitle": "Yaqin atrofdagi JK",
+    "priceFromShort": "dan",
+    "perM2": "m²"
   },
   "FloorTower": {
     "title": "Uy maketi",
