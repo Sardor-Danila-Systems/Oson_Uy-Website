@@ -41,7 +41,13 @@ export default function Header() {
     );
 
     return (
-        <nav className="sticky top-0 w-full z-50 bg-white/80 backdrop-blur border-b border-slate-200 h-16 flex items-center">
+        <nav
+            className={cn(
+                "fixed inset-x-0 top-0 z-50 flex h-16 w-full items-center",
+                "border-b border-slate-200/60 bg-white/55 shadow-sm backdrop-blur-xl backdrop-saturate-150",
+                "supports-[backdrop-filter]:bg-white/45",
+            )}
+        >
             <div className="container flex items-center justify-between md:grid md:grid-cols-[1fr_auto_1fr] w-full px-4 mx-auto">
                 {/* Mobile: Left | Desktop: Left */}
                 <Link href="/" className="flex items-center gap-2 order-1 md:order-1 transition-transform active:scale-95">

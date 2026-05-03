@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Lock, ArrowRight } from "lucide-react";
+import { Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
 
 export default function AdminLogin() {
   const [key, setKey] = useState("");
+  const [showKey, setShowKey] = useState(false);
   const router = useRouter();
 
   const handleLogin = (e: React.FormEvent) => {
@@ -43,14 +44,25 @@ export default function AdminLogin() {
             <label className="mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-500">
               Секретный ключ администратора
             </label>
-            <input
-              type="password"
-              value={key}
-              onChange={(e) => setKey(e.target.value)}
-              placeholder="Введите ADMIN_SECRET"
-              required
-              className="h-12 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 text-sm text-slate-900 outline-none transition focus:border-[#1E3A8A] focus:bg-white focus:ring-2 focus:ring-[#1E3A8A]/20"
-            />
+            <div className="relative">
+              <input
+                type={showKey ? "text" : "password"}
+                value={key}
+                onChange={(e) => setKey(e.target.value)}
+                placeholder="Введите ADMIN_SECRET"
+                autoComplete="current-password"
+                required
+                className="h-12 w-full rounded-xl border border-slate-300 bg-slate-50 py-0 pl-4 pr-12 text-sm text-slate-900 outline-none transition focus:border-[#1E3A8A] focus:bg-white focus:ring-2 focus:ring-[#1E3A8A]/20"
+              />
+              <button
+                type="button"
+                onClick={() => setShowKey((v) => !v)}
+                className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+                aria-label={showKey ? "Скрыть ключ" : "Показать ключ"}
+              >
+                {showKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
           </div>
 
           <button

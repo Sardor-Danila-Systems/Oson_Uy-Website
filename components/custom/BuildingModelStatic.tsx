@@ -12,11 +12,6 @@ import { useLayoutEffect, useMemo, useRef, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import * as THREE from "three";
 import type { ProjectFloor } from "@/types";
-import {
-  isRetailStory,
-  minFloorInProject,
-  residentialStoryNumber,
-} from "@/lib/floorDisplay";
 
 export type BuildingModelStaticProps = {
   floors: ProjectFloor[];
@@ -25,27 +20,34 @@ export type BuildingModelStaticProps = {
   onPick: (floor: ProjectFloor) => void;
 };
 
-const FH = 0.2;
+/** Высота одного яруса в модели (больше — проще попасть на этаж). */
+const FH = 0.3;
 const W = 4.6;
 const D_CORE = 0.58;
 const BALCONY_D = 0.38;
 const D_TOTAL = D_CORE + BALCONY_D;
-const BAYS = 6;
+const SECTION_COUNT = 3;
 const ROT_Y = 0;
 
-/** Светлый «белый» фасад */
-const C = {
-  panelLight: "#ffffff",
-  panelMid: "#f7f7f5",
-  bandDark: "#c5c9d0",
-  bandDeep: "#aeb3bd",
-  frameEdge: "#b8a99a",
-  glass: "#e8eef4",
-  accentRed: "#e85d5d",
-  balcony: "#e8eaef",
-  rail: "#94a3b8",
-  sill: "#f1f3f6",
-  recess: "#9aa3ad",
+/** «Поднять» корпус над плоскостью земли (только визуализация). */
+const VISUAL_FLOOR_LIFT = FH * 2;
+
+/** Палитра близко к референсному фасаду: терракота 1-го, крем серединных, пояс крыши */
+const REF = {
+  ground: "#b5655a",
+  groundDeep: "#8f463e",
+  plinth: "#6b3a33",
+  cream: "#ebe4d6",
+  creamAlt: "#dfd5c4",
+  band: "#a05045",
+  glass: "#9ecae8",
+  glassBalcony: "#7eb8dc",
+  frame: "#4a3f36",
+  pilaster: "#5a534c",
+  floorLine: "#9a9285",
+  rail: "#6b7280",
+  sill: "#d8d0c4",
+  roof: "#7a828c",
 };
 
 function CameraFit({
@@ -84,18 +86,24 @@ function CameraFit({
     const tanHalfV = Math.tan(vFov / 2);
     const tanHalfH = Math.max(Math.tan(hFov / 2), 1e-4);
 
+    /** ~15px поля слева/справа в пикселях канваса */
+    const paddingPx = 15;
+    const usableWidth = Math.max(size.width - 2 * paddingPx, size.width * 0.55);
+    const horizontalFitScale = size.width / usableWidth;
+
     const halfH = sizeVec.y * 0.5;
     const halfW = Math.max(sizeVec.x, sizeVec.z) * 0.5;
     const distV = halfH / tanHalfV;
     const distH = halfW / tanHalfH;
-    const dist = Math.max(distV, distH) * 1.025;
+    let dist = Math.max(distV, distH) * horizontalFitScale * 1.01;
     if (!Number.isFinite(dist) || dist <= 0) return;
 
-    /** Почти фронтально — как на референсе, ровный горизонт */
-    const offset = new THREE.Vector3(0.06, 0.12, 0.992).normalize().multiplyScalar(dist);
+    // Ровно перед фасадом: по центру по X, лёгкий подъём по Y
+    const dir = new THREE.Vector3(0, 0.045, 1).normalize();
+    const offset = dir.multiplyScalar(dist);
     persp.position.copy(center.clone().add(offset));
     persp.up.set(0, 1, 0);
-    persp.lookAt(center);
+    persp.lookAt(center.x, center.y, center.z);
     persp.near = Math.max(dist / 250, 0.04);
     persp.far = dist * 60;
     persp.updateProjectionMatrix();
@@ -103,6 +111,33 @@ function CameraFit({
 
   return null;
 }
+
+type FacadeCol = { xCenter: number; width: number; kind: "win" | "balcony" };
+
+function buildFacadeColumns(): FacadeCol[] {
+  const sectionW = (W * 0.92) / SECTION_COUNT;
+  const xStart = -W * 0.46;
+  const wFrac = [0.2, 0.2, 0.36, 0.2, 0.2];
+  const cols: FacadeCol[] = [];
+  for (let s = 0; s < SECTION_COUNT; s++) {
+    const sx = xStart + s * sectionW;
+    const sum = wFrac.reduce((a, b) => a + b, 0);
+    let x = sx + sectionW * 0.02;
+    const inner = sectionW * 0.96;
+    for (let k = 0; k < 5; k++) {
+      const cw = (wFrac[k]! / sum) * inner;
+      cols.push({
+        xCenter: x + cw / 2,
+        width: cw * 0.92,
+        kind: k === 2 ? "balcony" : "win",
+      });
+      x += cw;
+    }
+  }
+  return cols;
+}
+
+const FACADE_COLS = buildFacadeColumns();
 
 function SideFacadeWindows({
   nFloors,
@@ -114,11 +149,11 @@ function SideFacadeWindows({
   slabHeights: number[];
 }) {
   const rows = Math.max(nFloors, 1);
-  const cols = 5;
+  const cols = 3;
   const faceX = W / 2 - 0.015;
   const spanZ = D_CORE * 0.82;
   const z0 = -spanZ / 2 + spanZ / (cols - 1) / 2;
-  const winW = spanZ / cols - 0.06;
+  const winW = spanZ / cols - 0.08;
 
   const nodes: ReactNode[] = [];
   for (let r = 0; r < rows; r++) {
@@ -130,14 +165,14 @@ function SideFacadeWindows({
         <group key={`${r}-${c}`} position={[faceX, y, z]}>
           <mesh castShadow>
             <boxGeometry args={[0.04, winH + 0.04, winW + 0.04]} />
-            <meshStandardMaterial color={C.sill} roughness={0.72} />
+            <meshStandardMaterial color={REF.sill} roughness={0.72} />
           </mesh>
           <mesh position={[0.022, 0, 0]}>
             <planeGeometry args={[0.01, winH]} />
             <meshStandardMaterial
-              color={C.glass}
-              roughness={0.28}
-              metalness={0.1}
+              color={REF.glass}
+              roughness={0.2}
+              metalness={0.14}
             />
           </mesh>
         </group>,
@@ -161,20 +196,16 @@ function BuildingScene({
     () => [...floors].sort((a, b) => b.floor - a.floor),
     [floors],
   );
-  const minProjectFloor = useMemo(() => minFloorInProject(floors), [floors]);
   const n = sorted.length;
-  /** Нижний ярус в модели — высокий торговый (магазины); остальные — типовая высота этажа. */
-  const RETAIL_MUL = 2.78;
-  const { slabHeights, floorCentersY, totalStack, retailExtra } = useMemo(() => {
+  const { slabHeights, floorCentersY, totalStack } = useMemo(() => {
     if (n === 0) {
       return {
         slabHeights: [] as number[],
         floorCentersY: [] as number[],
         totalStack: 0,
-        retailExtra: 0,
       };
     }
-    const h = sorted.map((_, idx) => (idx === n - 1 ? FH * RETAIL_MUL : FH));
+    const h = sorted.map(() => FH);
     const sum = h.reduce((a, b) => a + b, 0);
     const centers: number[] = new Array(n);
     let acc = -sum / 2;
@@ -187,29 +218,29 @@ function BuildingScene({
       slabHeights: h,
       floorCentersY: centers,
       totalStack: sum,
-      retailExtra: FH * (RETAIL_MUL - 1),
     };
-  }, [n, sorted, RETAIL_MUL]);
+  }, [n, sorted]);
 
   const topY = totalStack / 2;
   const botY = -totalStack / 2;
-  const groundY = botY - FH * 1.35 - retailExtra * 0.35;
+  const groundY = botY - FH * 1.35 + VISUAL_FLOOR_LIFT;
   const totalHeight = totalStack + 0.48;
-  const pilasterY = 0;
-  const fitDeps = [n, sorted.map((f) => f.id).join(","), String(RETAIL_MUL)];
+  const fitDeps = [n, sorted.map((f) => f.id).join(",")];
 
-  const baySpan = (W * 0.92) / BAYS;
-  const x0 = -((BAYS - 1) * baySpan) / 2;
+  const sectionW = (W * 0.92) / SECTION_COUNT;
+  const xStart = -W * 0.46;
   const hitZ = D_CORE / 2 + BALCONY_D + 0.12;
+  const faceZ = D_CORE / 2 + 0.018;
+  const wallD = 0.052;
 
   return (
     <>
-      <color attach="background" args={["#f4f6f9"]} />
+      <color attach="background" args={["#e4e8ee"]} />
 
-      <hemisphereLight intensity={0.82} groundColor="#ebe8e4" color="#ffffff" />
+      <hemisphereLight intensity={0.9} groundColor="#e5e0d8" color="#ffffff" />
       <directionalLight
-        position={[2, 18, 12]}
-        intensity={0.85}
+        position={[2.5, 20, 14]}
+        intensity={1.08}
         castShadow
         shadow-mapSize={[2048, 2048]}
         shadow-camera-far={60}
@@ -217,25 +248,26 @@ function BuildingScene({
         shadow-camera-right={8}
         shadow-camera-top={12}
         shadow-camera-bottom={-8}
-        shadow-bias={-0.00015}
-        shadow-radius={3}
+        shadow-bias={-0.00012}
+        shadow-radius={2.5}
       />
-      <directionalLight position={[-4, 10, -2]} intensity={0.45} color="#f0f4ff" />
-      <ambientLight intensity={0.45} />
+      <directionalLight position={[-5, 12, -3]} intensity={0.48} color="#eef4ff" />
+      <ambientLight intensity={0.52} />
 
       <group ref={buildingRef}>
-        <group rotation={[0, ROT_Y, 0]} position={[0, 0, 0]}>
-          {Array.from({ length: BAYS + 1 }).map((_, i) => {
-            const x = -W * 0.46 + (i * (W * 0.92)) / BAYS;
+        <group rotation={[0, ROT_Y, 0]} position={[0, VISUAL_FLOOR_LIFT, 0]}>
+          {/* Вертикальные пояса между тремя секциями */}
+          {Array.from({ length: SECTION_COUNT + 1 }).map((_, i) => {
+            const x = xStart + i * sectionW;
             return (
               <mesh
-                key={`p-${i}`}
-                position={[x, pilasterY, D_CORE / 2 - 0.01]}
+                key={`pil-${i}`}
+                position={[x, 0, D_CORE / 2 - 0.01]}
                 castShadow
                 receiveShadow
               >
-                <boxGeometry args={[0.09, totalHeight, 0.055]} />
-                <meshStandardMaterial color={C.bandDark} roughness={0.78} />
+                <boxGeometry args={[0.07, totalHeight, 0.06]} />
+                <meshStandardMaterial color={REF.pilaster} roughness={0.78} />
               </mesh>
             );
           })}
@@ -243,25 +275,23 @@ function BuildingScene({
           {sorted.map((f, idx) => {
             const y = floorCentersY[idx] ?? 0;
             const hov = hoverId === f.id;
-            const isRetail = idx === n - 1;
             const floorH = slabHeights[idx] ?? FH;
-            const bodyY = isRetail ? -FH * 0.04 : 0;
-            const hitH = Math.max(floorH * 1.15, FH * 1.1);
-            const panelTint = idx % 2 === 0 ? C.panelLight : C.panelMid;
-            const faceZ = D_CORE / 2 + 0.018;
-            const wallD = 0.052;
-            let botH: number;
-            let winHR: number;
-            let topH: number;
-            if (isRetail) {
-              botH = floorH * 0.07;
-              winHR = floorH * 0.8;
-              topH = floorH * 0.13;
-            } else {
-              botH = floorH * 0.17;
-              winHR = floorH * 0.5;
-              topH = floorH * 0.33;
-            }
+            const bodyY = 0;
+            const hitH = Math.max(floorH * 1.32, FH * 1.2);
+
+            const isBottom = n > 1 && idx === n - 1;
+            const isTop = n > 1 && idx === 0;
+            const panelBase = isBottom
+              ? REF.ground
+              : isTop
+                ? REF.cream
+                : idx % 2 === 0
+                  ? REF.cream
+                  : REF.creamAlt;
+
+            const botH = floorH * 0.16;
+            const winHR = floorH * 0.52;
+            const topH = floorH * 0.32;
             const y0 = bodyY - floorH * 0.5;
 
             return (
@@ -293,127 +323,121 @@ function BuildingScene({
 
                 {hov ? (
                   <Html
-                    position={[0, bodyY + floorH * 0.12, hitZ + 0.06]}
+                    position={[0, bodyY + floorH * 0.1, hitZ + 0.06]}
                     center
-                    distanceFactor={6}
+                    distanceFactor={5.5}
                     style={{ pointerEvents: "none" }}
                     zIndexRange={[200, 0]}
                   >
-                    <div className="rounded border border-slate-700/25 bg-slate-900/88 px-1.5 py-0.5 text-[9px] font-semibold leading-tight tracking-wide text-white shadow-sm">
-                      {isRetailStory(f, minProjectFloor)
-                        ? t("floorRetail")
-                        : t("floorLabel", {
-                            n: residentialStoryNumber(f, minProjectFloor),
-                          })}
+                    <div className="rounded-md border-2 border-white/90 bg-[#1e3a5f] px-2 py-1 text-[11px] font-black uppercase tracking-wide text-white shadow-lg">
+                      {t("floorLabel", { n: f.floor })}
                     </div>
                   </Html>
                 ) : null}
 
+                {/* Чёткая горизонталь этажа */}
+                <mesh position={[0, y0 - 0.008, faceZ + 0.012]} receiveShadow>
+                  <boxGeometry args={[W * 0.93, 0.02, 0.045]} />
+                  <meshStandardMaterial color={REF.floorLine} roughness={0.55} />
+                </mesh>
+
                 <RoundedBox
                   args={[W * 0.96, floorH * 0.86, D_CORE * 0.78]}
-                  radius={0.014}
+                  radius={0.012}
                   smoothness={2}
                   position={[0, bodyY, -BALCONY_D * 0.42]}
                   castShadow
                   receiveShadow
                 >
                   <meshStandardMaterial
-                    color={hov ? "#e8edf5" : panelTint}
-                    roughness={0.52}
+                    color={hov ? "#f5f0e6" : panelBase}
+                    roughness={0.56}
                     metalness={0.02}
                     emissive={hov ? "#fed7aa" : "#000000"}
-                    emissiveIntensity={hov ? 0.12 : 0}
+                    emissiveIntensity={hov ? 0.16 : 0}
                   />
                 </RoundedBox>
 
-                {/* Тонкая плита балкона под рядом окон — не «ленточный» фасад */}
-                <mesh
-                  position={[0, y0 + botH * 0.35, faceZ + 0.09]}
-                  castShadow
-                  receiveShadow
-                >
-                  <boxGeometry args={[W * 0.91, 0.024, 0.13]} />
-                  <meshStandardMaterial
-                    color={hov ? "#f1f4f8" : C.balcony}
-                    roughness={0.55}
-                    metalness={0.06}
-                  />
-                </mesh>
-                <mesh
-                  position={[0, y0 + botH + winHR * 0.82, faceZ + 0.16]}
-                  castShadow
-                >
-                  <boxGeometry args={[W * 0.89, 0.038, 0.022]} />
-                  <meshStandardMaterial color={C.rail} roughness={0.4} metalness={0.32} />
-                </mesh>
+                {/* Типичный пояс последнего этажа — тёмная горизонталь посередине окна */}
+                {isTop ? (
+                  <mesh
+                    position={[0, y0 + botH + winHR * 0.48, faceZ + 0.025]}
+                    castShadow
+                  >
+                    <boxGeometry args={[W * 0.9, winHR * 0.2, 0.035]} />
+                    <meshStandardMaterial color={REF.band} roughness={0.62} />
+                  </mesh>
+                ) : null}
 
-                {Array.from({ length: BAYS }).map((_, bi) => {
-                  const x = x0 + bi * baySpan;
-                  const bw = baySpan * 0.9;
+                {FACADE_COLS.map((col, bi) => {
+                  const bw = col.width;
+                  const x = col.xCenter;
                   const topCy = y0 + botH + winHR + topH / 2;
                   const botCy = y0 + botH / 2;
                   const winCy = y0 + botH + winHR / 2;
-                  const gw = baySpan * 0.74;
-                  const gh = winHR * 0.86;
-                  const showAc = bi % 2 === 0 && !isRetail;
+                  const gw = col.kind === "balcony" ? bw * 0.88 : bw * 0.78;
+                  const gh = col.kind === "balcony" ? winHR * 0.92 : winHR * 0.84;
                   const recessC = faceZ - wallD * 0.5 - 0.055;
+                  const zGlass =
+                    col.kind === "balcony" ? faceZ + 0.055 : recessC + 0.02;
+                  const panelTint = panelBase;
 
                   return (
-                    <group key={bi}>
+                    <group key={`${f.id}-${bi}`}>
                       <mesh position={[x, topCy, faceZ - wallD / 2]} castShadow receiveShadow>
                         <boxGeometry args={[bw, topH, wallD]} />
-                        <meshStandardMaterial color={panelTint} roughness={0.58} metalness={0.02} />
+                        <meshStandardMaterial
+                          color={panelTint}
+                          roughness={0.54}
+                          metalness={0.02}
+                        />
                       </mesh>
                       <mesh position={[x, botCy, faceZ - wallD / 2]} castShadow receiveShadow>
                         <boxGeometry args={[bw, botH, wallD]} />
-                        <meshStandardMaterial color={C.sill} roughness={0.6} metalness={0.02} />
+                        <meshStandardMaterial color={REF.sill} roughness={0.6} metalness={0.02} />
                       </mesh>
 
-                      <group position={[x, winCy, recessC]}>
+                      <group position={[x, winCy, col.kind === "balcony" ? zGlass - 0.02 : recessC]}>
                         <mesh position={[0, 0, -0.03]}>
-                          <boxGeometry args={[gw + 0.06, gh + 0.06, 0.034]} />
-                          <meshStandardMaterial color={C.recess} roughness={0.85} />
+                          <boxGeometry args={[gw + 0.06, gh + 0.06, 0.032]} />
+                          <meshStandardMaterial color={REF.frame} roughness={0.75} />
                         </mesh>
                         {(() => {
-                          const ft = 0.02;
-                          const fz = -0.01;
+                          const ft = col.kind === "balcony" ? 0.018 : 0.02;
+                          const fz = col.kind === "balcony" ? 0.02 : -0.01;
                           return (
                             <>
                               <mesh position={[0, gh / 2 + ft / 2, fz]}>
                                 <boxGeometry args={[gw + ft * 2, ft, 0.026]} />
-                                <meshStandardMaterial color={C.frameEdge} roughness={0.62} />
+                                <meshStandardMaterial color={REF.frame} roughness={0.55} />
                               </mesh>
                               <mesh position={[0, -gh / 2 - ft / 2, fz]}>
                                 <boxGeometry args={[gw + ft * 2, ft, 0.026]} />
-                                <meshStandardMaterial color={C.frameEdge} roughness={0.62} />
+                                <meshStandardMaterial color={REF.frame} roughness={0.55} />
                               </mesh>
                               <mesh position={[-gw / 2 - ft / 2, 0, fz]}>
                                 <boxGeometry args={[ft, gh + ft * 2, 0.026]} />
-                                <meshStandardMaterial color={C.frameEdge} roughness={0.62} />
+                                <meshStandardMaterial color={REF.frame} roughness={0.55} />
                               </mesh>
                               <mesh position={[gw / 2 + ft / 2, 0, fz]}>
                                 <boxGeometry args={[ft, gh + ft * 2, 0.026]} />
-                                <meshStandardMaterial color={C.frameEdge} roughness={0.62} />
+                                <meshStandardMaterial color={REF.frame} roughness={0.55} />
                               </mesh>
                             </>
                           );
                         })()}
-                        <mesh position={[0, 0, 0.016]}>
-                          <planeGeometry args={[gw * 0.9, gh * 0.9]} />
+                        <mesh position={[0, 0, col.kind === "balcony" ? 0.04 : 0.016]}>
+                          <planeGeometry args={[gw * 0.92, gh * 0.92]} />
                           <meshStandardMaterial
-                            color={isRetail ? "#e8f0f8" : C.glass}
-                            roughness={0.18}
-                            metalness={0.14}
+                            color={col.kind === "balcony" ? REF.glassBalcony : REF.glass}
+                            roughness={col.kind === "balcony" ? 0.12 : 0.18}
+                            metalness={col.kind === "balcony" ? 0.28 : 0.16}
                           />
                         </mesh>
-                        {showAc ? (
-                          <mesh position={[gw * 0.36, -gh * 0.3, 0.03]}>
-                            <boxGeometry args={[0.065, 0.052, 0.04]} />
-                            <meshStandardMaterial
-                              color={C.accentRed}
-                              roughness={0.52}
-                              metalness={0.14}
-                            />
+                        {col.kind === "balcony" ? (
+                          <mesh position={[0, -gh * 0.38, 0.06]}>
+                            <boxGeometry args={[gw * 0.95, 0.032, 0.02]} />
+                            <meshStandardMaterial color={REF.rail} roughness={0.4} metalness={0.35} />
                           </mesh>
                         ) : null}
                       </group>
@@ -432,41 +456,35 @@ function BuildingScene({
 
           <mesh position={[0, topY + FH * 0.82, -0.06]} castShadow receiveShadow>
             <boxGeometry args={[W + 0.12, 0.1, D_TOTAL + 0.08]} />
-            <meshStandardMaterial color={C.bandDark} roughness={0.7} metalness={0.1} />
+            <meshStandardMaterial color={REF.roof} roughness={0.7} metalness={0.08} />
           </mesh>
-          {[
-            [-1.1, 0.14, -0.2],
-            [0.35, 0.18, 0.12],
-            [1.25, 0.12, -0.08],
-          ].map(([px, ph, pz], i) => (
-            <mesh
-              key={i}
-              position={[px as number, topY + FH * 0.98 + (ph as number) / 2, (pz as number) - 0.06]}
-              castShadow
-              receiveShadow
-            >
-              <boxGeometry args={[0.85, ph as number, 0.65]} />
-              <meshStandardMaterial color={C.bandDeep} roughness={0.76} />
-            </mesh>
-          ))}
 
-          <mesh
-            position={[0, botY - FH * 0.62 - retailExtra * 0.22, 0]}
-            castShadow
-            receiveShadow
-          >
+          {/* Три техблока над центральными лоджиями */}
+          {[0, 1, 2].map((s) => {
+            const cx = xStart + (s + 0.5) * sectionW;
+            return (
+              <mesh
+                key={`roof-${s}`}
+                position={[cx, topY + FH * 1.02, D_CORE * 0.06]}
+                castShadow
+                receiveShadow
+              >
+                <boxGeometry args={[sectionW * 0.34, FH * 1.05, D_CORE * 0.5]} />
+                <meshStandardMaterial color={REF.roof} roughness={0.72} metalness={0.1} />
+              </mesh>
+            );
+          })}
+
+          <mesh position={[0, botY - FH * 0.62, 0]} castShadow receiveShadow>
             <boxGeometry args={[W + 0.1, 0.26, D_TOTAL + 0.06]} />
-            <meshStandardMaterial color={C.bandDark} roughness={0.82} />
+            <meshStandardMaterial color={REF.plinth} roughness={0.82} />
           </mesh>
 
           {[-W * 0.34, W * 0.34].map((x, i) => (
-            <group
-              key={i}
-              position={[x, botY - FH * 0.02 - retailExtra * 0.18, D_CORE / 2 + 0.14]}
-            >
+            <group key={i} position={[x, botY - FH * 0.02, D_CORE / 2 + 0.14]}>
               <mesh position={[0, 0.04, 0]} castShadow receiveShadow>
                 <boxGeometry args={[0.52, 0.12, 0.32]} />
-                <meshStandardMaterial color={C.bandDark} roughness={0.52} metalness={0.18} />
+                <meshStandardMaterial color={REF.groundDeep} roughness={0.55} metalness={0.12} />
               </mesh>
             </group>
           ))}
@@ -479,15 +497,15 @@ function BuildingScene({
         receiveShadow
       >
         <planeGeometry args={[5.5, 5.5]} />
-        <meshStandardMaterial color="#d2d6de" roughness={0.9} />
+        <meshStandardMaterial color="#b8c0cc" roughness={0.9} />
       </mesh>
 
       <ContactShadows
         frames={1}
         position={[0, groundY + 0.02, 0]}
-        opacity={0.22}
+        opacity={0.3}
         scale={7}
-        blur={2.8}
+        blur={2.4}
         far={4}
       />
 
@@ -499,7 +517,7 @@ function BuildingScene({
 export function BuildingModelStatic(props: BuildingModelStaticProps) {
   return (
     <div
-      className="relative mx-auto aspect-[4/3] w-full max-h-[min(520px,70vh)] min-h-[300px] overflow-hidden rounded-xl border border-slate-200/90 bg-[#f4f6f9] shadow-inner sm:aspect-[5/3] sm:rounded-2xl md:max-h-[580px]"
+      className="relative mx-auto aspect-[4/3] w-full max-h-[min(520px,70vh)] min-h-[300px] overflow-hidden rounded-xl border border-slate-200/90 bg-[#e4e8ee] shadow-inner sm:aspect-[5/3] sm:rounded-2xl md:max-h-[580px]"
       onPointerLeave={() => props.onHover(null)}
     >
       <Canvas
@@ -511,7 +529,7 @@ export function BuildingModelStatic(props: BuildingModelStaticProps) {
         }}
         dpr={[1, 2]}
       >
-        <PerspectiveCamera makeDefault fov={29} near={0.05} far={160} />
+        <PerspectiveCamera makeDefault fov={33} near={0.05} far={160} />
         <BuildingScene {...props} />
       </Canvas>
     </div>

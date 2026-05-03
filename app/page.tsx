@@ -97,8 +97,8 @@ export default function Home() {
     }, []);
 
     return (
-        <div className="flex flex-col w-full min-h-screen md:pt-16 lg:pt-0">
-            <section className="relative min-h-[98vh] md:h-[92vh] flex items-center justify-center overflow-hidden">
+        <div className="-mt-16 flex min-h-screen w-full flex-col">
+            <section className="relative flex min-h-[98vh] items-center justify-center overflow-hidden pt-16 md:h-[92vh] md:pt-0">
                 <div className="absolute inset-0 z-0">
                     <AnimatePresence mode="wait">
                         <motion.video

@@ -14,12 +14,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import type { ProjectFloor } from "@/types";
-import {
-  isRetailStory,
-  minFloorInProject,
-  residentialStoryNumber,
-} from "@/lib/floorDisplay";
-import { Building2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Building2, ChevronLeft, ChevronRight, Layers } from "lucide-react";
 
 type FloorTowerProps = {
   projectId: number;
@@ -54,12 +49,7 @@ export function FloorTower({
     return [...floors].sort((a, b) => b.floor - a.floor);
   }, [floors]);
 
-  const minProjectFloor = useMemo(() => minFloorInProject(floors), [floors]);
-
-  const floorTitle = (f: ProjectFloor) =>
-    isRetailStory(f, minProjectFloor)
-      ? t("floorRetail")
-      : t("floorLabel", { n: residentialStoryNumber(f, minProjectFloor) });
+  const floorTitle = (f: ProjectFloor) => t("floorLabel", { n: f.floor });
 
   const placeholderCount = useMemo(() => {
     if (!totalFloorsHint || totalFloorsHint <= sorted.length) return 0;
@@ -112,9 +102,11 @@ export function FloorTower({
           {t("pickerHint")}
         </p>
 
-        <div className="mt-3 flex flex-wrap justify-center gap-2 sm:gap-2.5">
+        <div className="mt-4 flex flex-wrap justify-center gap-3 sm:gap-3.5">
           {sorted.map((f) => {
-            const active = hoverId === f.id;
+            const hovered = hoverId === f.id;
+            const selected = activeFloor?.id === f.id;
+            const focus = hovered || selected;
             return (
               <button
                 key={f.id}
@@ -123,20 +115,25 @@ export function FloorTower({
                 onMouseEnter={() => setHoverId(f.id)}
                 onMouseLeave={() => setHoverId(null)}
                 className={cn(
-                  "min-w-[5.5rem] rounded-xl border px-3 py-2 text-left shadow-sm transition-all sm:min-w-[6rem]",
-                  active
-                    ? "border-[#F97316] bg-orange-50 ring-2 ring-[#F97316]/25"
-                    : "border-slate-200 bg-white hover:border-slate-300",
+                  "group relative min-w-[7.25rem] cursor-pointer rounded-2xl border-2 px-3.5 py-3 text-left shadow-md outline-none transition-all duration-200 sm:min-w-[7.75rem]",
+                  "focus-visible:ring-2 focus-visible:ring-[#F97316]/50 focus-visible:ring-offset-2",
+                  focus
+                    ? "border-[#F97316] bg-gradient-to-br from-orange-50 via-white to-slate-50/90 shadow-lg shadow-orange-900/10 ring-2 ring-[#F97316]/20"
+                    : "border-slate-100/90 bg-white hover:-translate-y-0.5 hover:border-slate-200 hover:shadow-lg active:scale-[0.98]",
                 )}
               >
-                <span className="block text-[10px] font-black uppercase tracking-wide text-[#1E3A8A]">
-                  {floorTitle(f)}
-                </span>
-                <span className="mt-0.5 block text-xs font-black tabular-nums text-slate-800">
+                <div className="mb-2 flex items-center justify-between gap-2">
+                  <span className="inline-flex items-center gap-1 rounded-lg bg-[#1E3A8A]/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-[#1E3A8A]">
+                    <Layers className="h-3 w-3 opacity-80" aria-hidden />
+                    {floorTitle(f)}
+                  </span>
+                </div>
+                <span className="block text-sm font-black tabular-nums tracking-tight text-slate-900">
                   {formatUzsPerM2(f.pricePerM2)}
                 </span>
-                <span className="text-[9px] font-semibold text-slate-500">
-                  {t("areaVariantsShort")}: {areaChipsText(f)}
+                <span className="mt-1.5 block border-t border-slate-100 pt-1.5 text-[10px] font-semibold leading-snug text-slate-500">
+                  <span className="text-slate-400">{t("areaVariantsShort")}: </span>
+                  {areaChipsText(f)}
                 </span>
               </button>
             );
