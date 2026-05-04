@@ -208,9 +208,9 @@ export default function ProjectDetailClient({ params }: ProjectDetailClientProps
     return (
         <div className="pt-16 md:pt-20 pb-20 bg-slate-50 min-h-screen">
             <div className="max-w-7xl mx-auto px-4 md:px-6">
-                <div className="bg-white rounded-[2.5rem] overflow-hidden shadow-sm flex flex-col md:flex-row mb-10 border border-slate-100">
-                    <div className="md:w-1/2 relative bg-slate-200 group">
-                        <div className="aspect-[16/10] md:aspect-auto md:h-[550px] w-full overflow-hidden">
+                <div className="bg-white rounded-[2.5rem] overflow-hidden shadow-sm flex flex-col md:flex-row md:items-start mb-10 border border-slate-100">
+                    <div className="w-full md:w-1/2 md:max-w-[50%] md:shrink-0 relative bg-slate-200 group flex flex-col">
+                        <div className="aspect-[16/10] md:aspect-auto md:h-[550px] w-full overflow-hidden shrink-0 relative">
                             <Carousel
                                 setApi={setApi}
                                 opts={{ loop: true, align: "start" }}
@@ -233,9 +233,10 @@ export default function ProjectDetailClient({ params }: ProjectDetailClientProps
                                 </CarouselContent>
 
                                 {gallery.length > 1 && (
-                                    <div className="absolute inset-x-0 bottom-4 flex justify-center gap-1.5 z-20">
+                                    <div className="absolute inset-x-0 bottom-3 md:bottom-4 flex justify-center gap-1.5 z-20 pointer-events-auto">
                                         {Array.from({ length: count }).map((_, i) => (
                                             <button
+                                                type="button"
                                                 key={i}
                                                 onClick={(e) => {
                                                     e.preventDefault();
@@ -255,12 +256,14 @@ export default function ProjectDetailClient({ params }: ProjectDetailClientProps
                                 {gallery.length > 1 && (
                                     <>
                                         <button
+                                            type="button"
                                             onClick={(e) => { e.preventDefault(); api?.scrollPrev(); }}
                                             className="absolute left-3 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-white/10 backdrop-blur-md text-white border border-white/20 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center z-20"
                                         >
                                             <ChevronLeft className="h-5 w-5" />
                                         </button>
                                         <button
+                                            type="button"
                                             onClick={(e) => { e.preventDefault(); api?.scrollNext(); }}
                                             className="absolute right-3 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-white/10 backdrop-blur-md text-white border border-white/20 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center z-20"
                                         >
@@ -271,7 +274,35 @@ export default function ProjectDetailClient({ params }: ProjectDetailClientProps
                             </Carousel>
                         </div>
 
-                        <div className="absolute top-3 left-3 md:top-6 md:left-6 flex flex-col gap-1.5 z-10">
+                        {gallery.length > 1 ? (
+                            <div className="z-[5] border-t border-white/10 bg-black/35 backdrop-blur-md px-2 py-2.5 md:px-3 md:py-3">
+                                <div className="flex gap-2 overflow-x-auto pb-0.5 [-ms-overflow-style:none] [scrollbar-width:thin] [&::-webkit-scrollbar]:h-1.5">
+                                    {gallery.map((thumb: string, i: number) => (
+                                        <button
+                                            key={`thumb-${i}-${thumb.slice(-24)}`}
+                                            type="button"
+                                            onClick={() => api?.scrollTo(i)}
+                                            className={cn(
+                                                "relative h-14 w-[5.5rem] shrink-0 overflow-hidden rounded-xl border-2 transition-all md:h-16 md:w-24",
+                                                current === i
+                                                    ? "border-[#F97316] ring-2 ring-[#F97316]/40 shadow-lg scale-[1.02]"
+                                                    : "border-white/20 opacity-90 hover:border-white/50 hover:opacity-100",
+                                            )}
+                                        >
+                                            {thumb ? (
+                                                <img
+                                                    src={thumb}
+                                                    alt=""
+                                                    className="h-full w-full object-cover"
+                                                />
+                                            ) : null}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        ) : null}
+
+                        <div className="absolute top-3 left-3 md:top-6 md:left-6 flex flex-col gap-1.5 z-10 pointer-events-none">
                             {(projectData.topInCatalog || projectData.topInHome) && (
                                 <Badge className="bg-[#FB7185] text-white border-none px-2.5 py-0.5 md:px-4 md:py-1.5 text-[9px] md:text-xs font-black uppercase tracking-widest shadow-xl shadow-rose-900/20">
                                     Popular
@@ -283,7 +314,7 @@ export default function ProjectDetailClient({ params }: ProjectDetailClientProps
                         </div>
                     </div>
 
-                    <div className="md:w-1/2 p-6 md:p-12 flex flex-col justify-center">
+                    <div className="w-full md:w-1/2 md:min-w-0 p-6 md:p-12 flex flex-col md:justify-start">
                         <div className="flex items-center gap-2 mb-4">
                             <h1 className="text-2xl md:text-4xl font-black text-[#1E3A8A] uppercase tracking-tight leading-none">
                                 {projectData.name}
@@ -508,16 +539,6 @@ export default function ProjectDetailClient({ params }: ProjectDetailClientProps
 
                 <RelatedProjectsCarousel title={t("siblingsTitle")} items={projectData.siblingProjects as CatalogProjectPreview[] | undefined} />
                 <RelatedProjectsCarousel title={t("nearbyTitle")} items={projectData.nearbyProjects as CatalogProjectPreview[] | undefined} />
-
-                {projectData.media?.length > 0 && (
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10">
-                        {projectData.media.map((m: any, i: number) => (
-                            <div key={i} className="h-24 md:h-32 rounded-xl overflow-hidden border border-slate-200">
-                                <img src={m.imageUrl} className="w-full h-full object-cover" alt="thumb" />
-                            </div>
-                        ))}
-                    </div>
-                )}
 
                 {projectData.videoUrl && (
                     <div className="mb-12 bg-white rounded-[2.5rem] border border-slate-100 p-8 md:p-12 shadow-sm">

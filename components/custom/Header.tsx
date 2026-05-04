@@ -51,9 +51,8 @@ export default function Header() {
             <div className="container mx-auto flex w-full max-w-[1400px] items-center justify-between px-5 sm:px-6 md:grid md:grid-cols-[1fr_auto_1fr] lg:px-8">
                 {/* Mobile: Left | Desktop: Left */}
                 <Link href="/" className="flex items-center gap-2 order-1 md:order-1 transition-transform active:scale-95">
-                    <Image src="/osonuy-logo-removebg-preview.png" alt="Oson Uy logo" width={40} height={40} className="h-9 w-9 md:h-10 md:w-10 object-contain" />
                     <span className="text-xl md:text-2xl font-black tracking-tighter text-[#1E3A8A]">
-                        {t("brand").slice(0, 2)}<span className="text-[#F97316]">{t("brand").slice(2)}</span>
+                        {t("brand").slice(0, 4)}<span className="text-[#F97316]">{t("brand").slice(4)}</span>
                     </span>
                 </Link>
 

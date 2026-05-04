@@ -13,6 +13,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  type CarouselApi,
+} from "@/components/ui/carousel";
 import type { ProjectFloor } from "@/types";
 import { Building2, ChevronLeft, ChevronRight, Layers } from "lucide-react";
 
@@ -40,7 +46,9 @@ export function FloorTower({
 }: FloorTowerProps) {
   const t = useTranslations("FloorTower");
   const [activeFloor, setActiveFloor] = useState<ProjectFloor | null>(null);
-  const [layoutIdx, setLayoutIdx] = useState(0);
+  const [layoutApi, setLayoutApi] = useState<CarouselApi>();
+  const [layoutSlide, setLayoutSlide] = useState(0);
+  const [layoutCount, setLayoutCount] = useState(0);
   const [leadOpen, setLeadOpen] = useState(false);
   const [leadFloorId, setLeadFloorId] = useState<number | undefined>();
   const [hoverId, setHoverId] = useState<number | null>(null);
@@ -59,8 +67,22 @@ export function FloorTower({
   const activeLayouts = activeFloor?.layouts ?? [];
 
   useEffect(() => {
-    setLayoutIdx(0);
-  }, [activeFloor?.id]);
+    if (!layoutApi) return;
+    const sync = () => {
+      setLayoutCount(layoutApi.scrollSnapList().length);
+      setLayoutSlide(layoutApi.selectedScrollSnap());
+    };
+    sync();
+    layoutApi.on("select", sync);
+    return () => {
+      layoutApi.off("select", sync);
+    };
+  }, [layoutApi]);
+
+  useEffect(() => {
+    if (!layoutApi || !activeLayouts.length) return;
+    layoutApi.scrollTo(0);
+  }, [activeFloor?.id, layoutApi, activeLayouts.length]);
 
   if (!sorted.length) {
     return (
@@ -154,80 +176,129 @@ export function FloorTower({
         <DialogContent className="max-w-lg overflow-hidden rounded-[2rem] border-none p-0">
           {activeFloor ? (
             <>
-              <div className="relative aspect-[16/10] w-full bg-slate-200">
-                {activeLayouts.length > 0 ? (
-                  <>
-                    <img
-                      src={activeLayouts[layoutIdx]?.imageUrl}
-                      alt={activeLayouts[layoutIdx]?.title ?? ""}
-                      className="h-full w-full object-cover"
-                    />
-                    {activeLayouts.length > 1 ? (
-                      <>
-                        <button
-                          type="button"
-                          aria-label="Previous layout"
-                          className="absolute left-2 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition hover:bg-black/55"
-                          onClick={() =>
-                            setLayoutIdx((i) =>
-                              i <= 0 ? activeLayouts.length - 1 : i - 1,
-                            )
-                          }
-                        >
-                          <ChevronLeft className="h-5 w-5" />
-                        </button>
-                        <button
-                          type="button"
-                          aria-label="Next layout"
-                          className="absolute right-2 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition hover:bg-black/55"
-                          onClick={() =>
-                            setLayoutIdx((i) =>
-                              i >= activeLayouts.length - 1 ? 0 : i + 1,
-                            )
-                          }
-                        >
-                          <ChevronRight className="h-5 w-5" />
-                        </button>
-                        <div className="absolute bottom-14 left-0 right-0 flex justify-center gap-1">
-                          {activeLayouts.map((_, i) => (
-                            <button
-                              key={i}
-                              type="button"
-                              aria-label={`Layout ${i + 1}`}
-                              className={cn(
-                                "h-1.5 rounded-full transition-all",
-                                i === layoutIdx
-                                  ? "w-6 bg-white shadow"
-                                  : "w-1.5 bg-white/45 hover:bg-white/70",
-                              )}
-                              onClick={() => setLayoutIdx(i)}
-                            />
+              <div className="flex flex-col bg-slate-200">
+                <div className="relative aspect-[16/10] w-full overflow-hidden group">
+                  {activeLayouts.length > 0 ? (
+                    <>
+                      <Carousel
+                        key={activeFloor.id}
+                        setApi={setLayoutApi}
+                        opts={{ loop: true, align: "start" }}
+                        className="h-full w-full"
+                      >
+                        <CarouselContent className="m-0 h-full flex">
+                          {activeLayouts.map((layout, idx) => (
+                            <CarouselItem
+                              key={layout.id ?? idx}
+                              className="p-0 h-full basis-full shrink-0 grow-0"
+                            >
+                              <div className="relative h-full min-h-[180px] w-full bg-slate-200">
+                                <img
+                                  src={layout.imageUrl}
+                                  alt={layout.title ?? ""}
+                                  className="h-full w-full object-cover"
+                                />
+                              </div>
+                            </CarouselItem>
                           ))}
-                        </div>
-                      </>
-                    ) : null}
-                  </>
-                ) : (
-                  <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-slate-100 px-6 text-center">
-                    <Building2 className="h-10 w-10 text-slate-300" />
-                    <p className="text-xs font-bold text-slate-500">
-                      {t("noLayouts")}
-                    </p>
-                  </div>
-                )}
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6 pt-16">
-                  <DialogHeader className="space-y-0 text-left">
-                    <DialogTitle className="text-2xl font-black uppercase italic text-white">
-                      {floorTitle(activeFloor)}
-                      {activeFloor.title ? ` · ${activeFloor.title}` : ""}
-                    </DialogTitle>
-                    {activeLayouts[layoutIdx]?.title ? (
-                      <p className="mt-1 text-sm font-semibold text-white/90">
-                        {activeLayouts[layoutIdx].title}
+                        </CarouselContent>
+                      </Carousel>
+
+                      {activeLayouts.length > 1 ? (
+                        <>
+                          <div className="absolute inset-x-0 bottom-12 z-20 flex justify-center gap-1.5 md:bottom-14">
+                            {Array.from({ length: layoutCount }).map((_, i) => (
+                              <button
+                                key={i}
+                                type="button"
+                                aria-label={`Slide ${i + 1}`}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  layoutApi?.scrollTo(i);
+                                }}
+                                className={cn(
+                                  "h-1 rounded-full transition-all duration-300",
+                                  layoutSlide === i
+                                    ? "w-5 bg-white shadow-lg"
+                                    : "w-1 bg-white/40 hover:bg-white/60",
+                                )}
+                              />
+                            ))}
+                          </div>
+                          <button
+                            type="button"
+                            aria-label="Previous layout"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              layoutApi?.scrollPrev();
+                            }}
+                            className="absolute left-3 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white opacity-0 backdrop-blur-md transition-all hover:bg-white/20 group-hover:opacity-100"
+                          >
+                            <ChevronLeft className="h-5 w-5" />
+                          </button>
+                          <button
+                            type="button"
+                            aria-label="Next layout"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              layoutApi?.scrollNext();
+                            }}
+                            className="absolute right-3 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white opacity-0 backdrop-blur-md transition-all hover:bg-white/20 group-hover:opacity-100"
+                          >
+                            <ChevronRight className="h-5 w-5" />
+                          </button>
+                        </>
+                      ) : null}
+
+                      <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-black/75 via-black/35 to-transparent p-5 pt-12 md:p-6 md:pt-16">
+                        <DialogHeader className="space-y-0 text-left">
+                          <DialogTitle className="text-xl font-black uppercase italic text-white md:text-2xl">
+                            {floorTitle(activeFloor)}
+                            {activeFloor.title ? ` · ${activeFloor.title}` : ""}
+                          </DialogTitle>
+                          {activeLayouts[layoutSlide]?.title ? (
+                            <p className="mt-1 text-sm font-semibold text-white/90">
+                              {activeLayouts[layoutSlide].title}
+                            </p>
+                          ) : null}
+                        </DialogHeader>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="flex aspect-[16/10] h-full w-full flex-col items-center justify-center gap-2 bg-slate-100 px-6 text-center">
+                      <Building2 className="h-10 w-10 text-slate-300" />
+                      <p className="text-xs font-bold text-slate-500">
+                        {t("noLayouts")}
                       </p>
-                    ) : null}
-                  </DialogHeader>
+                    </div>
+                  )}
                 </div>
+
+                {activeLayouts.length > 1 ? (
+                  <div className="border-t border-white/10 bg-black/35 px-2 py-2.5 backdrop-blur-md md:px-3 md:py-3">
+                    <div className="flex gap-2 overflow-x-auto pb-0.5 [-ms-overflow-style:none] [scrollbar-width:thin]">
+                      {activeLayouts.map((layout, i) => (
+                        <button
+                          key={layout.id ?? i}
+                          type="button"
+                          onClick={() => layoutApi?.scrollTo(i)}
+                          className={cn(
+                            "relative h-14 w-[5.5rem] shrink-0 overflow-hidden rounded-xl border-2 transition-all md:h-16 md:w-24",
+                            layoutSlide === i
+                              ? "border-[#F97316] shadow-lg ring-2 ring-[#F97316]/40"
+                              : "border-white/20 opacity-90 hover:border-white/50 hover:opacity-100",
+                          )}
+                        >
+                          <img
+                            src={layout.imageUrl}
+                            alt=""
+                            className="h-full w-full object-cover"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
               </div>
               <div className="space-y-4 p-6 md:p-8">
                 <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
