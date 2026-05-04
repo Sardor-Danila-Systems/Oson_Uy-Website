@@ -18,13 +18,14 @@ const REGION_VIDEOS: Record<string, string> = {
     "Samarkand (Самаркандская обл.)": "/videos/samarkand.mp4",
     "Bukhara (Бухарская обл.)": "/videos/bukhara.mp4",
     "Andijan (Андижанская обл.)": "/videos/andijan.mp4",
-    "Namangan (Наманганская обл.)": "/videos/namangan.mp4",
     "Fergana (Ферганская обл.)": "/videos/fergana.mp4",
     "Navoi (Навоийская обл.)": "/videos/navoi.mp4",
     "Kashkadarya (Кашкадарьинская обл.)": "/videos/kashkadarya.mp4",
-    "Surkhandarya (Сурхандарьинская обл.)": "/videos/surkhandarya.mp4",
     "Khorezm (Хорезмская обл.)": "/videos/khorezm.mp4",
     "Jizzakh (Джизакская обл.)": "/videos/jizzakh.mp4",
+    "Namangan (Наманганская обл.)": "/videos/tashkent.mp4",
+    "Surkhandarya (Сурхандарьинская обл.)": "/videos/tashkent.mp4",
+    "Syrdarya (Сырдарьинская обл.)": "/videos/tashkent.mp4",
 };
 
 export default function HomeClient() {
