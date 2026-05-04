@@ -1,6 +1,45 @@
+import type { Metadata } from "next";
 import { Shield, Users, BarChart3, Globe, ArrowUpRight, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { absoluteUrl, getSiteUrl } from "@/lib/site";
+
+export async function generateMetadata(): Promise<Metadata> {
+    const t = await getTranslations("Seo");
+    const siteUrl = getSiteUrl();
+    const title = t("aboutTitle");
+    const description = t("aboutDescription");
+    const keywords = t("defaultKeywords")
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+    const ogImage = absoluteUrl("/osonuy-logo-removebg-preview.png");
+    const locale = await getLocale();
+    const canonical = `${siteUrl}/about`;
+
+    return {
+        title,
+        description,
+        keywords,
+        alternates: { canonical },
+        openGraph: {
+            title,
+            description,
+            url: canonical,
+            siteName: t("siteName"),
+            locale,
+            type: "website",
+            images: [{ url: ogImage, width: 800, height: 800, alt: t("ogImageAlt") }],
+        },
+        twitter: {
+            card: "summary_large_image",
+            title,
+            description,
+            images: [ogImage],
+            site: t("twitterSite") || undefined,
+        },
+    };
+}
 
 export default async function About() {
     const t = await getTranslations("About");

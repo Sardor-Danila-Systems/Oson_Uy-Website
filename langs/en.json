@@ -1,4 +1,21 @@
 {
+  "Seo": {
+    "siteName": "Oson Uy",
+    "titleTemplate": "%s | Oson Uy",
+    "defaultTitle": "Oson Uy — new buildings and residential complexes in Uzbekistan",
+    "defaultDescription": "Catalog of new buildings in Tashkent and regions: developer projects, price per m² by floor, layouts, installment, parking. Leave a request on Oson Uy.",
+    "defaultKeywords": "Oson Uy, new buildings Uzbekistan, new buildings Tashkent, primary market, residential complex, novostroyki, price per m2, layouts, developer",
+    "homeTitle": "Oson Uy — new homes in Uzbekistan",
+    "homeDescription": "Choose a residential complex: transparent floor pricing, layouts, verified developers. Tashkent, Samarkand, Bukhara and other regions.",
+    "catalogTitle": "Catalog of new buildings — Oson Uy",
+    "catalogDescription": "All developer projects in one place. Filter by city, district, and price per m². Compare residential complexes and request a call.",
+    "aboutTitle": "About Oson Uy",
+    "aboutDescription": "Platform for the primary real estate market in Uzbekistan: we help buyers find new buildings and connect with developers.",
+    "projectTitle": "{name} — new building in {location}",
+    "projectDescription": "{name}: new residential complex in {place}. Delivery: {delivery}. Prices per m² and floor plans on Oson Uy — request a consultation.",
+    "ogImageAlt": "Oson Uy — new buildings in Uzbekistan",
+    "twitterSite": "@osonuy"
+  },
   "Header": {
     "home": "Home",
     "catalog": "Catalog",

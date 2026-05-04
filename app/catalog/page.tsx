@@ -1,12 +1,51 @@
-import { getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
+import { getLocale, getTranslations } from "next-intl/server";
 import { FilterDrawer } from "@/components/custom/FilterDrawer";
 import { ProjectGrid } from "@/components/custom/ProjectGrid";
 import { Project } from "@/types";
 import { minPricePerM2FromApiProject } from "@/lib/project-price";
+import { absoluteUrl, getSiteUrl } from "@/lib/site";
 
 type CatalogPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Seo");
+  const siteUrl = getSiteUrl();
+  const title = t("catalogTitle");
+  const description = t("catalogDescription");
+  const keywords = t("defaultKeywords")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const ogImage = absoluteUrl("/osonuy-logo-removebg-preview.png");
+  const locale = await getLocale();
+  const canonical = `${siteUrl}/catalog`;
+
+  return {
+    title,
+    description,
+    keywords,
+    alternates: { canonical },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      siteName: t("siteName"),
+      locale,
+      type: "website",
+      images: [{ url: ogImage, width: 800, height: 800, alt: t("ogImageAlt") }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage],
+      site: t("twitterSite") || undefined,
+    },
+  };
+}
 
 const toNumber = (value?: string | string[]) => {
   if (!value || Array.isArray(value)) return undefined;

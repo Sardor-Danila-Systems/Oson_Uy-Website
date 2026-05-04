@@ -1,4 +1,21 @@
 {
+  "Seo": {
+    "siteName": "Oson Uy",
+    "titleTemplate": "%s | Oson Uy",
+    "defaultTitle": "Oson Uy — Yangi uylar va turar-joy majmualari, O'zbekiston",
+    "defaultDescription": "Toshkent va viloyatlarda yangi uylar katalogi: quruvchi loyihalari, qavat bo'yicha m² narxi, rejalashtirish, muddatli to'lov, avtoturargoh. Oson Uy da so'rov qoldiring.",
+    "defaultKeywords": "Oson Uy, yangi uylar O'zbekiston, yangi uylar Toshkent, birlamchi bozor, turar-joy majmuasi, JK, m2 narxi, rejalashtirish, quruvchi",
+    "homeTitle": "Oson Uy — O'zbekistonda yangi uy",
+    "homeDescription": "JK tanlang: qavatlar bo'yicha narxlar, rejalashtirish, tekshirilgan quruvchilar. Toshkent, Samarqand, Buxoro va boshqa hududlar.",
+    "catalogTitle": "Yangi uylar katalogi — Oson Uy",
+    "catalogDescription": "Barcha quruvchi loyihalari bir joyda. Shahar, tuman va m² narxi bo'yicha filtr. JK ni solishtiring va qo'ng'iroq buyurtma qiling.",
+    "aboutTitle": "Oson Uy haqida",
+    "aboutDescription": "O'zbekistonda birlamchi ko'chmas mulk bozori uchun platforma: xaridorlarga yangi uylarni topish va quruvchilar bilan bog'lanishda yordam beramiz.",
+    "projectTitle": "{name} — {location} dagi yangi uy",
+    "projectDescription": "{name}: {place} dagi yangi turar-joy majmuasi. Topshirish: {delivery}. m² narxlari va rejalashtirish Oson Uy da — maslahat so'rang.",
+    "ogImageAlt": "Oson Uy — O'zbekistonda yangi uylar",
+    "twitterSite": "@osonuy"
+  },
   "Header": {
     "home": "Bosh sahifa",
     "catalog": "Katalog",
