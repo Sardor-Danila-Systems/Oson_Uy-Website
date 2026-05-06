@@ -183,6 +183,8 @@
     "elevators": "Liftlar",
     "developerTitle": "Quruvchi",
     "developerAbout": "Kompaniya haqida",
+    "progressTitle": "Qurilish jarayoni",
+    "progressDone": "Bajarildi: {done} / {total}",
     "legalAddressLabel": "Yuridik manzil",
     "officeAddressLabel": "Ofis",
     "siblingsTitle": "Shu quruvchining boshqa loyihalari",

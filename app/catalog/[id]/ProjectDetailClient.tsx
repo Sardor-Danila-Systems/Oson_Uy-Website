@@ -26,6 +26,7 @@ import type { CatalogProjectPreview } from "@/types";
 import { formatUzsPerM2 } from "@/lib/currency";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import { FloorTower } from "@/components/custom/FloorTower";
 import {
     Carousel,
@@ -471,6 +472,45 @@ export default function ProjectDetailClient({ params }: ProjectDetailClientProps
                                 </div>
                             ))}
                         </div>
+                    </div>
+                ) : null}
+
+                {Array.isArray(projectData?.progress?.milestones) && projectData.progress.milestones.length > 0 ? (
+                    <div className="mb-10 rounded-[2.5rem] border border-slate-100 bg-white p-6 md:p-10 shadow-sm">
+                        <div className="flex items-center justify-between gap-4 mb-6">
+                            <h2 className="text-xl md:text-2xl font-black text-[#1E3A8A] uppercase tracking-tight">
+                                {t("progressTitle")}
+                            </h2>
+                            <div className="text-sm font-black text-slate-900">
+                                {projectData.progress.percent != null ? `${projectData.progress.percent}%` : "—"}
+                            </div>
+                        </div>
+
+                        <Progress value={projectData.progress.percent ?? 0} className="h-3" />
+
+                        <div className="mt-6 space-y-3">
+                            {(projectData.progress.milestones ?? [])
+                                .slice()
+                                .sort((a: any, b: any) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
+                                .map((m: any, idx: number) => (
+                                    <div key={m.id ?? idx} className="flex items-start gap-3">
+                                        {m.done ? (
+                                            <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0 mt-0.5" />
+                                        ) : (
+                                            <div className="h-5 w-5 shrink-0 mt-0.5 rounded-full border-2 border-slate-300" />
+                                        )}
+                                        <div className="min-w-0">
+                                            <p className={cn("text-sm font-bold break-words", m.done ? "text-slate-900" : "text-slate-700")}>
+                                                {m.title}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))}
+                        </div>
+
+                        <p className="mt-6 text-xs font-semibold text-slate-500">
+                            {t("progressDone", { done: projectData.progress.done ?? 0, total: projectData.progress.total ?? projectData.progress.milestones.length })}
+                        </p>
                     </div>
                 ) : null}
 

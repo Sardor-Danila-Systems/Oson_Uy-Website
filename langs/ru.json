@@ -183,6 +183,8 @@
     "elevators": "Лифты",
     "developerTitle": "Застройщик",
     "developerAbout": "О компании",
+    "progressTitle": "Ход строительства",
+    "progressDone": "Выполнено: {done} из {total}",
     "legalAddressLabel": "Юридический адрес",
     "officeAddressLabel": "Офис / приёмная",
     "siblingsTitle": "Другие проекты застройщика",

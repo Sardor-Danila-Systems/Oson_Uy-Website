@@ -183,6 +183,8 @@
     "elevators": "Elevators",
     "developerTitle": "Developer",
     "developerAbout": "About the company",
+    "progressTitle": "Construction progress",
+    "progressDone": "Completed: {done} of {total}",
     "legalAddressLabel": "Legal address",
     "officeAddressLabel": "Office",
     "siblingsTitle": "More from this developer",
