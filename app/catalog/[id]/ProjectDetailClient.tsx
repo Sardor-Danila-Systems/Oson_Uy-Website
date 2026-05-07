@@ -493,17 +493,34 @@ export default function ProjectDetailClient({ params }: ProjectDetailClientProps
                                 .slice()
                                 .sort((a: any, b: any) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
                                 .map((m: any, idx: number) => (
-                                    <div key={m.id ?? idx} className="flex items-start gap-3">
-                                        {m.done ? (
-                                            <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0 mt-0.5" />
-                                        ) : (
-                                            <div className="h-5 w-5 shrink-0 mt-0.5 rounded-full border-2 border-slate-300" />
-                                        )}
-                                        <div className="min-w-0">
-                                            <p className={cn("text-sm font-bold break-words", m.done ? "text-slate-900" : "text-slate-700")}>
-                                                {m.title}
-                                            </p>
+                                    <div key={m.id ?? idx} className="space-y-2">
+                                        <div className="flex items-start gap-3">
+                                            {m.done ? (
+                                                <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0 mt-0.5" />
+                                            ) : (
+                                                <div className="h-5 w-5 shrink-0 mt-0.5 rounded-full border-2 border-slate-300" />
+                                            )}
+                                            <div className="min-w-0">
+                                                <p className={cn("text-sm font-bold break-words", m.done ? "text-slate-900" : "text-slate-700")}>
+                                                    {m.title}
+                                                </p>
+                                            </div>
                                         </div>
+
+                                        {Array.isArray(m.photoUrls) && m.photoUrls.length > 0 ? (
+                                            <div className="flex gap-2 overflow-x-auto pl-8 pb-1">
+                                                {m.photoUrls.slice(0, 8).map((url: string) => (
+                                                    // eslint-disable-next-line @next/next/no-img-element
+                                                    <img
+                                                        key={url}
+                                                        src={url}
+                                                        alt=""
+                                                        className="h-14 w-20 rounded-xl border border-slate-200 object-cover bg-slate-50 shrink-0"
+                                                        loading="lazy"
+                                                    />
+                                                ))}
+                                            </div>
+                                        ) : null}
                                     </div>
                                 ))}
                         </div>
