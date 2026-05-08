@@ -60,6 +60,7 @@ export default function ProjectDetailClient({ params }: ProjectDetailClientProps
     const [isOpen, setIsOpen] = useState(false);
     const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
     const [isQrModalOpen, setIsQrModalOpen] = useState(false);
+    const [progressPhoto, setProgressPhoto] = useState<string | null>(null);
 
     const [api, setApi] = useState<CarouselApi>();
     const [current, setCurrent] = useState(0);
@@ -208,6 +209,14 @@ export default function ProjectDetailClient({ params }: ProjectDetailClientProps
 
     return (
         <div className="pt-16 md:pt-20 pb-20 bg-slate-50 min-h-screen">
+            <Dialog open={progressPhoto != null} onOpenChange={(o) => !o && setProgressPhoto(null)}>
+                <DialogContent className="max-w-5xl p-0 overflow-hidden bg-black border-black">
+                    {progressPhoto ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={progressPhoto} alt="" className="w-full max-h-[85vh] object-contain bg-black" />
+                    ) : null}
+                </DialogContent>
+            </Dialog>
             <div className="max-w-7xl mx-auto px-4 md:px-6">
                 <div className="bg-white rounded-[2.5rem] overflow-hidden shadow-sm flex flex-col md:flex-row md:items-start mb-10 border border-slate-100">
                     <div className="w-full md:w-1/2 md:max-w-[50%] md:shrink-0 relative bg-slate-200 group flex flex-col">
@@ -510,14 +519,21 @@ export default function ProjectDetailClient({ params }: ProjectDetailClientProps
                                         {Array.isArray(m.photoUrls) && m.photoUrls.length > 0 ? (
                                             <div className="flex gap-2 overflow-x-auto pl-8 pb-1">
                                                 {m.photoUrls.slice(0, 8).map((url: string) => (
-                                                    // eslint-disable-next-line @next/next/no-img-element
-                                                    <img
+                                                    <button
                                                         key={url}
-                                                        src={url}
-                                                        alt=""
-                                                        className="h-14 w-20 rounded-xl border border-slate-200 object-cover bg-slate-50 shrink-0"
-                                                        loading="lazy"
-                                                    />
+                                                        type="button"
+                                                        onClick={() => setProgressPhoto(url)}
+                                                        className="shrink-0 rounded-xl border border-slate-200 bg-slate-50 overflow-hidden"
+                                                        aria-label="Open photo"
+                                                    >
+                                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                        <img
+                                                            src={url}
+                                                            alt=""
+                                                            className="h-14 w-20 object-cover"
+                                                            loading="lazy"
+                                                        />
+                                                    </button>
                                                 ))}
                                             </div>
                                         ) : null}
