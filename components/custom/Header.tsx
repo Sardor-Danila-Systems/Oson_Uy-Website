@@ -48,7 +48,7 @@ export default function Header() {
                 "supports-[backdrop-filter]:bg-white/45",
             )}
         >
-            <div className="container mx-auto flex w-full max-w-[1400px] items-center justify-between px-5 sm:px-6 md:grid md:grid-cols-[1fr_auto_1fr] lg:px-8">
+            <div className="container mx-auto flex w-full max-w-[1250px] items-center justify-between md:grid md:grid-cols-[1fr_auto_1fr] px-5">
                 {/* Mobile: Left | Desktop: Left */}
                 <Link href="/" className="flex items-center gap-2 order-1 md:order-1 transition-transform active:scale-95">
                     <span className="text-xl md:text-2xl font-black tracking-tighter text-[#1E3A8A]">

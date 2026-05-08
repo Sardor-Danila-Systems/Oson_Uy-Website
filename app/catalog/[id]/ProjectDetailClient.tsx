@@ -201,26 +201,25 @@ export default function ProjectDetailClient({ params }: ProjectDetailClientProps
     }
 
     const hasFloors = apiFloors.length > 0;
-
     const fallbackQuery = `${projectData.location} ${projectData.district || ""}`;
     const mapSrc = projectData.mapEmbedUrl && projectData.mapEmbedUrl.includes("http")
         ? projectData.mapEmbedUrl
-        : `https://www.google.com/maps?q=${encodeURIComponent(projectData.mapEmbedUrl || fallbackQuery)}&output=embed`;
+        : `https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=${encodeURIComponent(projectData.mapEmbedUrl || fallbackQuery)}`;
 
     return (
         <div className="pt-16 md:pt-20 pb-20 bg-slate-50 min-h-screen">
             <Dialog open={progressPhoto != null} onOpenChange={(o) => !o && setProgressPhoto(null)}>
                 <DialogContent className="max-w-5xl p-0 overflow-hidden bg-black border-black">
                     {progressPhoto ? (
-                        // eslint-disable-next-line @next/next/no-img-element
                         <img src={progressPhoto} alt="" className="w-full max-h-[85vh] object-contain bg-black" />
                     ) : null}
                 </DialogContent>
             </Dialog>
+
             <div className="max-w-7xl mx-auto px-4 md:px-6">
-                <div className="bg-white rounded-[2.5rem] overflow-hidden shadow-sm flex flex-col md:flex-row md:items-start mb-10 border border-slate-100">
-                    <div className="w-full md:w-1/2 md:max-w-[50%] md:shrink-0 relative bg-slate-200 group flex flex-col">
-                        <div className="aspect-[16/10] md:aspect-auto md:h-[550px] w-full overflow-hidden shrink-0 relative">
+                <div className="bg-white rounded-[2.5rem] overflow-hidden shadow-sm flex flex-col md:flex-row items-stretch md:items-start mb-10 border border-slate-100">
+                    <div className="w-full md:w-1/2 md:max-w-[50%] md:shrink-0 relative group flex flex-col md:sticky md:top-20">
+                        <div className="aspect-[16/10] md:aspect-auto max-h-[450px] w-full overflow-hidden shrink-0 relative rounded-[1.5rem] mt-3 mx-3 md:mt-4 md:mx-4 border border-slate-100">
                             <Carousel
                                 setApi={setApi}
                                 opts={{ loop: true, align: "start" }}
@@ -256,36 +255,36 @@ export default function ProjectDetailClient({ params }: ProjectDetailClientProps
                                                     "h-1 rounded-full transition-all duration-300",
                                                     current === i
                                                         ? "w-5 bg-white shadow-lg"
-                                                        : "w-1 bg-white/40 hover:bg-white/60"
+                                                        : "w-1 bg-white hover:bg-white"
                                                 )}
                                             />
                                         ))}
                                     </div>
                                 )}
 
-                                {gallery.length > 1 && (
-                                    <>
-                                        <button
-                                            type="button"
-                                            onClick={(e) => { e.preventDefault(); api?.scrollPrev(); }}
-                                            className="absolute left-3 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-white/10 backdrop-blur-md text-white border border-white/20 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center z-20"
-                                        >
-                                            <ChevronLeft className="h-5 w-5" />
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={(e) => { e.preventDefault(); api?.scrollNext(); }}
-                                            className="absolute right-3 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-white/10 backdrop-blur-md text-white border border-white/20 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center z-20"
-                                        >
-                                            <ChevronRight className="h-5 w-5" />
-                                        </button>
-                                    </>
-                                )}
                             </Carousel>
+                            {gallery.length > 1 && (
+                                <>
+                                    <button
+                                        type="button"
+                                        onClick={(e) => { e.preventDefault(); api?.scrollPrev(); }}
+                                        className="absolute left-3 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-white/10 backdrop-blur-md text-white border border-white/20 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center z-20"
+                                    >
+                                        <ChevronLeft className="h-5 w-5" />
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={(e) => { e.preventDefault(); api?.scrollNext(); }}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-white/10 backdrop-blur-md text-white border border-white/20 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center z-20"
+                                    >
+                                        <ChevronRight className="h-5 w-5" />
+                                    </button>
+                                </>
+                            )}
                         </div>
 
                         {gallery.length > 1 ? (
-                            <div className="z-[5] border-t border-white/10 bg-black/35 backdrop-blur-md px-2 py-2.5 md:px-3 md:py-3">
+                            <div className="z-[5] border-t border-white bg-white backdrop-blur-md px-2 py-2.5 md:px-3 md:py-3">
                                 <div className="flex gap-2 overflow-x-auto pb-0.5 [-ms-overflow-style:none] [scrollbar-width:thin] [&::-webkit-scrollbar]:h-1.5">
                                     {gallery.map((thumb: string, i: number) => (
                                         <button
@@ -296,7 +295,7 @@ export default function ProjectDetailClient({ params }: ProjectDetailClientProps
                                                 "relative h-14 w-[5.5rem] shrink-0 overflow-hidden rounded-xl border-2 transition-all md:h-16 md:w-24",
                                                 current === i
                                                     ? "border-[#F97316] ring-2 ring-[#F97316]/40 shadow-lg scale-[1.02]"
-                                                    : "border-white/20 opacity-90 hover:border-white/50 hover:opacity-100",
+                                                    : "border-white opacity-90 hover:border-white hover:opacity-100",
                                             )}
                                         >
                                             {thumb ? (
@@ -324,7 +323,7 @@ export default function ProjectDetailClient({ params }: ProjectDetailClientProps
                         </div>
                     </div>
 
-                    <div className="w-full md:w-1/2 md:min-w-0 p-6 md:p-12 flex flex-col md:justify-start">
+                    <div className="w-full md:w-1/2 md:min-w-0 p-6 md:p-12 flex flex-col md:justify-start bg-white">
                         <div className="flex items-center gap-2 mb-4">
                             <h1 className="text-2xl md:text-4xl font-black text-[#1E3A8A] uppercase tracking-tight leading-none">
                                 {projectData.name}
@@ -526,7 +525,6 @@ export default function ProjectDetailClient({ params }: ProjectDetailClientProps
                                                         className="shrink-0 rounded-xl border border-slate-200 bg-slate-50 overflow-hidden"
                                                         aria-label="Open photo"
                                                     >
-                                                        {/* eslint-disable-next-line @next/next/no-img-element */}
                                                         <img
                                                             src={url}
                                                             alt=""
@@ -551,8 +549,7 @@ export default function ProjectDetailClient({ params }: ProjectDetailClientProps
                     const dev = projectData.developer;
                     if (!dev?.name) return null;
                     const web = (dev.website || "").trim();
-                    const webHref =
-                        !web ? "" : web.startsWith("http") ? web : `https://${web}`;
+                    const webHref = !web ? "" : web.startsWith("http") ? web : `https://${web}`;
                     return (
                         <div className="mb-10 rounded-[2.5rem] border border-slate-100 bg-white p-6 md:p-10 shadow-sm">
                             <h2 className="text-xl md:text-2xl font-black text-[#1E3A8A] mb-6 uppercase tracking-tight">
@@ -682,7 +679,7 @@ export default function ProjectDetailClient({ params }: ProjectDetailClientProps
                                         ))}
                                     </div>
                                     <p className="text-slate-700 italic text-sm leading-relaxed">
-                                        &quot;{review.comment || t("noComment")}&quot;
+                                        "{review.comment || t("noComment")}"
                                     </p>
                                 </div>
                             ))}
@@ -810,7 +807,6 @@ function VideoPlayer({ url }: { url: string }) {
     };
 
     const youtubeId = getYoutubeId(url);
-
     if (youtubeId) {
         return (
             <div className="aspect-video w-full bg-slate-900">
