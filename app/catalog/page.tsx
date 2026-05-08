@@ -198,7 +198,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
   };
 
   return (
-    <div className="lg:pt-5 md:pt-20 pb-16 px-8 max-w-7xl mx-auto">
+    <div className="lg:pt-5 md:pt-20 pb-16 px-5 max-w-7xl mx-auto">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
         <h1 className="text-4xl font-black text-primary tracking-tight">
           {t("title")}
