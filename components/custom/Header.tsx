@@ -7,7 +7,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { CiGlobe } from "react-icons/ci";
 import { cn } from '@/lib/utils';
 import { useLocale, useTranslations } from 'next-intl';
-import { useRouter, usePathname } from 'next/navigation'; 
+import { useRouter, usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import { Drawer, DrawerContent, DrawerHeader, DrawerClose } from '../ui/drawer';
 
@@ -36,8 +36,8 @@ export default function Header() {
         "relative inline-flex h-10 items-center pb-0.5 transition-all duration-300",
         "after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[2px] after:bg-[#F97316] after:transition-all after:duration-300",
         pathname === href
-            ? "text-[#1E3A8A] after:w-full" 
-            : "opacity-60 hover:opacity-100 after:w-0 hover:after:w-full" 
+            ? "text-[#1E3A8A] after:w-full"
+            : "opacity-60 hover:opacity-100 after:w-0 hover:after:w-full"
     );
 
     return (
@@ -87,7 +87,7 @@ export default function Header() {
                         </DropdownMenuContent>
                     </DropdownMenu>
 
-                    <button 
+                    <button
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
                         className="md:hidden p-2 text-[#1E3A8A] hover:bg-slate-100 rounded-xl transition-all active:scale-95"
                         aria-label="Toggle menu"
@@ -103,8 +103,11 @@ export default function Header() {
                     <div className="flex flex-col h-full bg-white">
                         <DrawerHeader className="border-b p-5 flex justify-between items-center text-left">
                             <div className="flex items-center gap-2">
-                                <Image src="/osonuy-logo-removebg-preview.png" alt="Oson Uy logo" width={32} height={32} className="h-8 w-8 object-contain" />
-                                <span className="font-black text-[#1E3A8A] text-lg tracking-tight">Oson Uy</span>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-xl font-bold tracking-tight text-[#1E3A8A]">
+                                        Oson<span className="text-[#F97316]">Uy</span>
+                                    </span>
+                                </div>
                             </div>
                             <DrawerClose asChild>
                                 <button className="p-2 rounded-full hover:bg-slate-100 transition-colors">
@@ -112,10 +115,10 @@ export default function Header() {
                                 </button>
                             </DrawerClose>
                         </DrawerHeader>
-                        
+
                         <div className="flex flex-col p-6 gap-2">
-                            <Link 
-                                href="/" 
+                            <Link
+                                href="/"
                                 onClick={() => setIsMenuOpen(false)}
                                 className={cn(
                                     "flex items-center px-4 py-3 rounded-xl text-lg font-bold transition-all",
@@ -124,8 +127,8 @@ export default function Header() {
                             >
                                 {t("home")}
                             </Link>
-                            <Link 
-                                href="/catalog" 
+                            <Link
+                                href="/catalog"
                                 onClick={() => setIsMenuOpen(false)}
                                 className={cn(
                                     "flex items-center px-4 py-3 rounded-xl text-lg font-bold transition-all",
@@ -134,8 +137,8 @@ export default function Header() {
                             >
                                 {t("catalog")}
                             </Link>
-                            <Link 
-                                href="/about" 
+                            <Link
+                                href="/about"
                                 onClick={() => setIsMenuOpen(false)}
                                 className={cn(
                                     "flex items-center px-4 py-3 rounded-xl text-lg font-bold transition-all",
@@ -158,8 +161,8 @@ export default function Header() {
                                         }}
                                         className={cn(
                                             "px-4 py-2 rounded-lg text-sm font-bold border transition-all",
-                                            locale === lang.code 
-                                                ? "bg-[#1E3A8A] border-[#1E3A8A] text-white shadow-lg shadow-blue-900/20" 
+                                            locale === lang.code
+                                                ? "bg-[#1E3A8A] border-[#1E3A8A] text-white shadow-lg shadow-blue-900/20"
                                                 : "bg-white border-slate-200 text-slate-600 hover:border-blue-200"
                                         )}
                                     >

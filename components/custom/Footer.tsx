@@ -12,7 +12,6 @@ export default function Footer() {
             <div className="container grid grid-cols-1 md:grid-cols-4 gap-12 px-4 mx-auto">
                 <div className="space-y-6">
                     <div className="flex items-center gap-2">
-                        <Image src="/osonuy-logo-removebg-preview.png" alt="Oson Uy logo" width={28} height={28} className="h-7 w-7 object-contain" />
                         <span className="text-xl font-bold tracking-tight text-[#1E3A8A]">
                             Oson<span className="text-[#F97316]">Uy</span>
                         </span>
