@@ -219,7 +219,7 @@ export default function ProjectDetailClient({ params }: ProjectDetailClientProps
             <div className="max-w-7xl mx-auto px-4 md:px-6">
                 <div className="bg-white rounded-[2.5rem] overflow-hidden shadow-sm flex flex-col md:flex-row items-stretch md:items-start mb-10 border border-slate-100">
                     <div className="w-full md:w-1/2 md:max-w-[50%] md:shrink-0 relative group flex flex-col md:sticky md:top-20">
-                        <div className="aspect-[16/10] md:aspect-auto max-h-[450px] w-full overflow-hidden shrink-0 relative rounded-[1.5rem] mt-3 mx-3 md:mt-4 md:mx-4 border border-slate-100">
+                        <div className="relative aspect-[16/10] md:aspect-auto max-h-[450px] w-[calc(100%-1.5rem)] md:w-[calc(100%-2rem)] overflow-hidden shrink-0 rounded-[1.5rem] mt-3 mx-auto md:mt-4 md:mx-4 border border-slate-100 isolation-auto">
                             <Carousel
                                 setApi={setApi}
                                 opts={{ loop: true, align: "start" }}
@@ -311,13 +311,13 @@ export default function ProjectDetailClient({ params }: ProjectDetailClientProps
                             </div>
                         ) : null}
 
-                        <div className="absolute top-3 left-3 md:top-6 md:left-6 flex flex-col gap-1.5 z-10 pointer-events-none">
+                        <div className="absolute top-[calc(0.75rem+12px)] left-[calc(0.75rem+12px)] md:top-10 md:left-10 flex flex-col gap-1.5 z-30 pointer-events-none">
                             {(projectData.topInCatalog || projectData.topInHome) && (
-                                <Badge className="bg-[#FB7185] text-white border-none px-2.5 py-0.5 md:px-4 md:py-1.5 text-[9px] md:text-xs font-black uppercase tracking-widest shadow-xl shadow-rose-900/20">
+                                <Badge className="bg-[#FB7185] text-white border-none px-2.5 py-0.5 md:px-4 md:py-1.5 text-[10px] md:text-xs font-black uppercase tracking-widest shadow-xl shadow-rose-900/20 whitespace-nowrap w-fit">
                                     Popular
                                 </Badge>
                             )}
-                            <Badge className="bg-[#F97316] text-white border-none px-2.5 py-0.5 md:px-4 md:py-1.5 text-[9px] md:text-xs font-black uppercase tracking-widest shadow-xl shadow-orange-900/20">
+                            <Badge className="bg-[#F97316] text-white border-none px-2.5 py-0.5 md:px-4 md:py-1.5 text-[10px] md:text-xs font-black uppercase tracking-widest shadow-xl shadow-orange-900/20 whitespace-nowrap w-fit">
                                 {projectData.plan || "PREMIUM"}
                             </Badge>
                         </div>
@@ -612,9 +612,9 @@ export default function ProjectDetailClient({ params }: ProjectDetailClientProps
 
                 {projectData.videoUrl && (
                     <div className="mb-12 bg-white rounded-[2.5rem] border border-slate-100 p-8 md:p-12 shadow-sm">
-                        <div className="flex flex-col md:flex-row gap-10 items-center">
-                            <div className="w-full md:w-[350px] shrink-0">
-                                <div className="rounded-3xl overflow-hidden shadow-2xl bg-black border border-slate-200">
+                        <div className="flex min-w-0 flex-col md:flex-row gap-10 items-center">
+                            <div className="w-full min-w-0 max-w-full md:w-[350px] md:shrink-0">
+                                <div className="rounded-3xl overflow-hidden shadow-2xl bg-black border border-slate-200 [transform:translateZ(0)] isolate">
                                     <VideoPlayer url={projectData.videoUrl} />
                                 </div>
                             </div>
@@ -809,10 +809,11 @@ function VideoPlayer({ url }: { url: string }) {
     const youtubeId = getYoutubeId(url);
     if (youtubeId) {
         return (
-            <div className="aspect-video w-full bg-slate-900">
+            <div className="aspect-video w-full max-w-full overflow-hidden bg-slate-900">
                 <iframe
                     src={`https://www.youtube.com/embed/${youtubeId}`}
-                    className="w-full h-full"
+                    title="YouTube"
+                    className="block h-full w-full max-w-full rounded-3xl border-0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                 />
@@ -822,10 +823,11 @@ function VideoPlayer({ url }: { url: string }) {
 
     if (isInstagram) {
         return (
-            <div className="w-full bg-black flex justify-center">
+            <div className="flex w-full max-w-full justify-center overflow-hidden bg-black">
                 <iframe
                     src={getInstagramEmbed(url)}
-                    className="w-full h-[550px] md:h-[650px]"
+                    title="Instagram"
+                    className="block h-[min(550px,78dvh)] w-full max-w-full rounded-3xl border-0 md:h-[650px]"
                     frameBorder="0"
                     scrolling="no"
                     allow="encrypted-media"
@@ -835,8 +837,12 @@ function VideoPlayer({ url }: { url: string }) {
     }
 
     return (
-        <div className="aspect-[9/16] w-full bg-black">
-            <video controls className="w-full h-full object-cover">
+        <div className="aspect-[9/16] w-full max-w-full overflow-hidden bg-black">
+            <video
+                controls
+                playsInline
+                className="h-full w-full max-w-full rounded-3xl object-cover"
+            >
                 <source src={url} type="video/mp4" />
                 Your browser does not support the video tag.
             </video>
