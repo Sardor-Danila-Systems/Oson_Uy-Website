@@ -179,12 +179,23 @@ export default function HomeClient() {
                                 {t("featuredSubtitle")}
                             </p>
                         </div>
-                        <Link
-                            href="/catalog"
-                            className="text-accent font-bold text-lg gap-2 p-0 hover:no-underline hover:translate-x-2 transition-transform"
-                        >
-                            {t("viewCatalog")}
-                        </Link>
+                        <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-6">
+                            <Link
+                                href="/catalog"
+                                className="text-accent font-bold text-lg gap-2 p-0 hover:no-underline hover:translate-x-2 transition-transform"
+                            >
+                                {t("viewCatalog")}
+                            </Link>
+                            <Link
+                                href="/cabinet/login"
+                                className="rounded-full border-2 border-primary/20 bg-white px-5 py-2 text-sm font-black uppercase tracking-widest text-primary shadow-sm transition hover:border-primary/40"
+                            >
+                                {t("cabinetCta")}
+                            </Link>
+                            <span className="hidden text-xs font-medium text-slate-400 sm:inline max-w-[200px]">
+                                {t("cabinetHint")}
+                            </span>
+                        </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
