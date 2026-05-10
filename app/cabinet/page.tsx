@@ -45,10 +45,6 @@ type CabinetMe = {
       done: boolean;
       photoUrls: string[];
     }>;
-    construction: {
-      percentComplete: number;
-      stages: Array<{ key: string; done: boolean }>;
-    } | null;
   };
 };
 
@@ -186,28 +182,6 @@ export default function CabinetDashboardPage() {
 
       <section className="rounded-3xl border border-slate-100 bg-white p-6 shadow-sm">
         <h2 className="text-lg font-black text-slate-900">{t("progress")}</h2>
-        {data.progress.construction ? (
-          <div className="mt-3">
-            <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
-              <div
-                className="h-full rounded-full bg-primary transition-all"
-                style={{
-                  width: `${Math.min(100, data.progress.construction.percentComplete)}%`,
-                }}
-              />
-            </div>
-            <p className="mt-2 text-xs font-bold text-slate-500">
-              {data.progress.construction.percentComplete}%
-            </p>
-            <ul className="mt-3 space-y-1 text-xs font-medium text-slate-600">
-              {data.progress.construction.stages.map((s) => (
-                <li key={s.key}>
-                  {s.done ? "✓" : "○"} {s.key}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
         <ul className="mt-4 space-y-2">
           {data.progress.milestones.map((m) => (
             <li

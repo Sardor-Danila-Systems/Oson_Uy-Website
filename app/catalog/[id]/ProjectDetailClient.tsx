@@ -483,8 +483,8 @@ export default function ProjectDetailClient({ params }: ProjectDetailClientProps
                     </div>
                 ) : null}
 
-                {((Array.isArray(projectData?.progress?.milestones) && projectData.progress.milestones.length > 0) ||
-                    (projectData?.progress?.construction?.stages?.length ?? 0) > 0) ? (
+                {Array.isArray(projectData?.progress?.milestones) &&
+                    projectData.progress.milestones.length > 0 ? (
                     <div className="mb-10 rounded-[2.5rem] border border-slate-100 bg-white p-6 md:p-10 shadow-sm">
                         <div className="flex items-center justify-between gap-4 mb-6">
                             <h2 className="text-xl md:text-2xl font-black text-[#1E3A8A] uppercase tracking-tight">
@@ -496,35 +496,6 @@ export default function ProjectDetailClient({ params }: ProjectDetailClientProps
                         </div>
 
                         <Progress value={projectData.progress.percent ?? 0} className="h-3" />
-
-                        {projectData.progress.construction?.stages?.length ? (
-                            <div className="mt-8 rounded-2xl border border-slate-100 bg-slate-50/80 p-5">
-                                <div className="flex items-center justify-between gap-2 mb-3">
-                                    <h3 className="text-sm font-black uppercase tracking-tight text-[#1E3A8A]">
-                                        {t("constructionChecklist")}
-                                    </h3>
-                                    <span className="text-xs font-black text-slate-700">
-                                        {projectData.progress.construction.percentComplete ?? 0}%
-                                    </span>
-                                </div>
-                                <Progress
-                                    value={projectData.progress.construction.percentComplete ?? 0}
-                                    className="h-2 mb-4"
-                                />
-                                <ul className="space-y-2 text-sm">
-                                    {projectData.progress.construction.stages.map((s: { key: string; done: boolean }) => (
-                                        <li key={s.key} className="flex items-center gap-2 font-medium text-slate-700">
-                                            {s.done ? (
-                                                <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
-                                            ) : (
-                                                <div className="h-4 w-4 shrink-0 rounded-full border-2 border-slate-300" />
-                                            )}
-                                            <span>{s.key.replace(/_/g, " ")}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        ) : null}
 
                         <div className="mt-6 space-y-3">
                             {(projectData.progress.milestones ?? [])
