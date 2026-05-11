@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { CABINET_TOKEN_KEY } from "@/lib/cabinet-token";
+import { formatPhoneInput, phoneDigitsOnly } from "@/lib/format";
 
 function apiBase() {
   return (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3002").replace(
@@ -16,7 +17,7 @@ function apiBase() {
 export default function CabinetLoginPage() {
   const t = useTranslations("Cabinet");
   const router = useRouter();
-  const [phone, setPhone] = useState("+998");
+  const [phone, setPhone] = useState("+998 ");
   const [code, setCode] = useState("");
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
@@ -30,7 +31,7 @@ export default function CabinetLoginPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          phone: phone.replace(/\s/g, ""),
+          phone: phoneDigitsOnly(phone),
           accessCode: code.trim(),
         }),
       });
@@ -66,9 +67,10 @@ export default function CabinetLoginPage() {
             </label>
             <input
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={(e) => setPhone(formatPhoneInput(e.target.value))}
               className="h-12 w-full rounded-xl border border-slate-200 px-4 text-sm font-semibold outline-none focus:ring-2 focus:ring-primary/20"
               autoComplete="tel"
+              placeholder="+998 __ ___ __ __"
             />
           </div>
           <div className="space-y-1.5">

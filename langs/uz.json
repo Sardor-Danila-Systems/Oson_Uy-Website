@@ -41,6 +41,8 @@
     "construction": "Nazorat ro'yxati",
     "documents": "Hujjatlar",
     "payments": "To'lovlar",
+    "paymentsSummaryHint": "Shartnoma, to'langan va qoldiq — quruvchi kiritganidek. Pastda barcha to'lovlar.",
+    "paymentsNone": "To'lovlar hali yo'q",
     "verify": "Tekshirish",
     "verifyOpen": "Ro'yxatdan tekshirish",
     "loading": "Yuklanmoqda…"

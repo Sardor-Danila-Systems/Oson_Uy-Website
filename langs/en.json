@@ -41,6 +41,8 @@
     "construction": "Checklist",
     "documents": "Documents",
     "payments": "Payments",
+    "paymentsSummaryHint": "Contract, paid, and balance reflect what your developer recorded. Below is the payment history.",
+    "paymentsNone": "No payments recorded yet",
     "verify": "Verification",
     "verifyOpen": "Open verification",
     "loading": "Loading…"

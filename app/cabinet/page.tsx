@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { formatUzs } from "@/lib/currency";
+import { formatPhoneNumber } from "@/lib/format";
 import { CABINET_TOKEN_KEY } from "@/lib/cabinet-token";
 
 function apiBase() {
@@ -108,7 +109,8 @@ export default function CabinetDashboardPage() {
         <div>
           <h1 className="text-3xl font-black text-primary">{t("dashboardTitle")}</h1>
           <p className="text-sm font-medium text-slate-500">
-            {data.customer.name} · {data.project.name}
+            {data.customer.name} · {formatPhoneNumber(data.customer.phone)} ·{" "}
+            {data.project.name}
           </p>
         </div>
         <button
@@ -144,6 +146,9 @@ export default function CabinetDashboardPage() {
 
       <section className="rounded-3xl border border-slate-100 bg-white p-6 shadow-sm">
         <h2 className="text-lg font-black text-slate-900">{t("payments")}</h2>
+        <p className="mt-1 text-xs font-medium text-slate-500">
+          {t("paymentsSummaryHint")}
+        </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <div className="rounded-2xl bg-slate-50 p-4">
             <p className="text-[10px] font-black uppercase text-slate-400">{t("total")}</p>
@@ -178,16 +183,17 @@ export default function CabinetDashboardPage() {
         </div>
         <ul className="mt-6 space-y-2 border-t border-slate-100 pt-4">
           {data.payments.length === 0 ? (
-            <li className="text-sm text-slate-400">—</li>
+            <li className="text-sm text-slate-400">{t("paymentsNone")}</li>
           ) : (
             data.payments.map((p) => (
               <li
                 key={p.id}
-                className="flex justify-between text-sm font-medium text-slate-700"
+                className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-slate-50 bg-slate-50/80 px-3 py-2 text-sm font-medium text-slate-800"
               >
-                <span>{formatUzs(p.amountUzs)}</span>
-                <span className="text-slate-400">
+                <span className="font-black">{formatUzs(p.amountUzs)}</span>
+                <span className="text-xs text-slate-500">
                   {new Date(p.paidAt).toLocaleDateString()} · {p.type}
+                  {p.comment ? ` · ${p.comment}` : ""}
                 </span>
               </li>
             ))
