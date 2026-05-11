@@ -33,6 +33,8 @@
     "total": "Договор",
     "paid": "Оплачено",
     "remaining": "Остаток",
+    "monthlyDue": "В этом месяце к оплате",
+    "monthlyDueHint": "Сумму задаёт застройщик в CRM.",
     "debt": "Задолженность",
     "progress": "Стройка",
     "milestones": "Этапы",

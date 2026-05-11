@@ -33,6 +33,8 @@
     "total": "Contract",
     "paid": "Paid",
     "remaining": "Balance",
+    "monthlyDue": "Due this month",
+    "monthlyDueHint": "The amount is set by your developer in CRM.",
     "debt": "Due",
     "progress": "Construction",
     "milestones": "Stages",

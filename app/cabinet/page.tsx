@@ -29,6 +29,7 @@ type CabinetMe = {
     paidUzs: number;
     remainingUzs: number;
     debtUzs: number;
+    monthlyDueUzs?: number | null;
   };
   payments: Array<{
     id: number;
@@ -143,7 +144,7 @@ export default function CabinetDashboardPage() {
 
       <section className="rounded-3xl border border-slate-100 bg-white p-6 shadow-sm">
         <h2 className="text-lg font-black text-slate-900">{t("payments")}</h2>
-        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <div className="rounded-2xl bg-slate-50 p-4">
             <p className="text-[10px] font-black uppercase text-slate-400">{t("total")}</p>
             <p className="text-lg font-black">{formatUzs(data.finances.totalPriceUzs)}</p>
@@ -160,6 +161,20 @@ export default function CabinetDashboardPage() {
               {formatUzs(data.finances.remainingUzs)}
             </p>
           </div>
+          {data.finances.monthlyDueUzs != null &&
+          data.finances.monthlyDueUzs > 0 ? (
+            <div className="rounded-2xl border border-blue-100 bg-blue-50 p-4 sm:col-span-2 lg:col-span-1">
+              <p className="text-[10px] font-black uppercase text-blue-800">
+                {t("monthlyDue")}
+              </p>
+              <p className="text-lg font-black text-blue-950">
+                {formatUzs(data.finances.monthlyDueUzs)}
+              </p>
+              <p className="mt-1 text-[11px] font-medium text-blue-900/80">
+                {t("monthlyDueHint")}
+              </p>
+            </div>
+          ) : null}
         </div>
         <ul className="mt-6 space-y-2 border-t border-slate-100 pt-4">
           {data.payments.length === 0 ? (

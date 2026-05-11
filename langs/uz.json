@@ -33,6 +33,8 @@
     "total": "Shartnoma",
     "paid": "To'langan",
     "remaining": "Qoldiq",
+    "monthlyDue": "Shu oy to'lovi",
+    "monthlyDueHint": "Summani quruvchi CRMda kiritadi.",
     "debt": "Qarz",
     "progress": "Qurilish",
     "milestones": "Bosqichlar",
