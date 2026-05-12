@@ -173,30 +173,30 @@ export function FloorTower({
         open={activeFloor !== null}
         onOpenChange={(open) => !open && setActiveFloor(null)}
       >
-        <DialogContent className="max-h-[min(92vh,880px)] w-[calc(100%-1rem)] max-w-6xl gap-0 overflow-hidden rounded-2xl border-none p-0 sm:max-w-6xl">
+        <DialogContent className="max-h-[min(94vh,920px)] w-[calc(100%-1rem)] max-w-6xl gap-0 overflow-hidden rounded-2xl border border-slate-200/80 p-0 shadow-2xl sm:max-w-6xl">
           {activeFloor ? (
-            <div className="flex max-h-[min(92vh,880px)] flex-col md:flex-row md:min-h-[440px]">
-              <div className="relative flex min-h-[220px] flex-1 flex-col bg-slate-900 md:min-h-[440px] md:w-[58%]">
-                <div className="relative min-h-[220px] flex-1 overflow-hidden group md:min-h-0">
+            <div className="flex max-h-[min(94vh,920px)] flex-col md:flex-row md:min-h-[min(72vh,560px)]">
+              <div className="relative flex min-h-[240px] flex-1 flex-col bg-white md:min-h-0 md:w-[58%]">
+                <div className="relative flex min-h-[min(52vh,480px)] flex-1 flex-col overflow-hidden bg-slate-100 group md:min-h-[min(62vh,560px)]">
                   {activeLayouts.length > 0 ? (
                     <>
                       <Carousel
                         key={activeFloor.id}
                         setApi={setLayoutApi}
                         opts={{ loop: true, align: "start" }}
-                        className="h-full min-h-[220px] w-full md:absolute md:inset-0 md:min-h-full"
+                        className="flex min-h-0 flex-1 flex-col"
                       >
-                        <CarouselContent className="m-0 flex h-full">
+                        <CarouselContent className="m-0 flex h-full min-h-0 flex-1">
                           {activeLayouts.map((layout, idx) => (
                             <CarouselItem
                               key={layout.id ?? idx}
-                              className="h-full basis-full shrink-0 grow-0 p-0"
+                              className="h-full min-h-0 basis-full shrink-0 grow-0 p-0"
                             >
-                              <div className="relative flex min-h-[220px] w-full items-center justify-center bg-slate-800 md:min-h-[440px] md:h-full">
+                              <div className="flex h-full min-h-[min(48vh,420px)] w-full flex-1 items-center justify-center p-3 md:min-h-[min(58vh,520px)] md:p-5">
                                 <img
                                   src={layout.imageUrl}
                                   alt={layout.title ?? ""}
-                                  className="h-full max-h-[min(55vh,520px)] w-full object-contain md:max-h-none"
+                                  className="max-h-full max-w-full object-contain"
                                 />
                               </div>
                             </CarouselItem>
@@ -206,25 +206,6 @@ export function FloorTower({
 
                       {activeLayouts.length > 1 ? (
                         <>
-                          <div className="absolute inset-x-0 bottom-3 z-20 flex justify-center gap-1.5 md:bottom-4">
-                            {Array.from({ length: layoutCount }).map((_, i) => (
-                              <button
-                                key={i}
-                                type="button"
-                                aria-label={`Slide ${i + 1}`}
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  layoutApi?.scrollTo(i);
-                                }}
-                                className={cn(
-                                  "h-1 rounded-full transition-all duration-300",
-                                  layoutSlide === i
-                                    ? "w-5 bg-white shadow-lg"
-                                    : "w-1 bg-white/40 hover:bg-white/60",
-                                )}
-                              />
-                            ))}
-                          </div>
                           <button
                             type="button"
                             aria-label="Previous layout"
@@ -232,7 +213,7 @@ export function FloorTower({
                               e.preventDefault();
                               layoutApi?.scrollPrev();
                             }}
-                            className="absolute left-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/40 text-white backdrop-blur-sm transition-opacity hover:bg-black/55 md:opacity-0 md:group-hover:opacity-100"
+                            className="absolute left-2 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white/95 text-slate-700 shadow-md transition-opacity hover:bg-white md:left-3 md:opacity-0 md:group-hover:opacity-100"
                           >
                             <ChevronLeft className="h-5 w-5" />
                           </button>
@@ -243,7 +224,7 @@ export function FloorTower({
                               e.preventDefault();
                               layoutApi?.scrollNext();
                             }}
-                            className="absolute right-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/40 text-white backdrop-blur-sm transition-opacity hover:bg-black/55 md:opacity-0 md:group-hover:opacity-100"
+                            className="absolute right-2 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white/95 text-slate-700 shadow-md transition-opacity hover:bg-white md:right-3 md:opacity-0 md:group-hover:opacity-100"
                           >
                             <ChevronRight className="h-5 w-5" />
                           </button>
@@ -251,9 +232,9 @@ export function FloorTower({
                       ) : null}
                     </>
                   ) : (
-                    <div className="flex min-h-[220px] w-full flex-col items-center justify-center gap-2 bg-slate-800 px-6 text-center md:min-h-[440px]">
-                      <Building2 className="h-12 w-12 text-slate-500" />
-                      <p className="text-sm font-bold text-slate-400">
+                    <div className="flex min-h-[240px] w-full flex-1 flex-col items-center justify-center gap-2 bg-slate-100 px-6 text-center md:min-h-[min(58vh,520px)]">
+                      <Building2 className="h-12 w-12 text-slate-400" />
+                      <p className="text-sm font-bold text-slate-500">
                         {t("noLayouts")}
                       </p>
                     </div>
@@ -261,8 +242,27 @@ export function FloorTower({
                 </div>
 
                 {activeLayouts.length > 1 ? (
-                  <div className="shrink-0 border-t border-white/10 bg-black/40 px-2 py-2 backdrop-blur-md md:px-3 md:py-3">
-                    <div className="flex gap-2 overflow-x-auto pb-0.5">
+                  <div className="shrink-0 border-t border-slate-200 bg-white px-2 py-3 md:px-4 md:py-3.5">
+                    <div className="mb-2.5 flex justify-center gap-1.5">
+                      {Array.from({ length: layoutCount }).map((_, i) => (
+                        <button
+                          key={i}
+                          type="button"
+                          aria-label={`Slide ${i + 1}`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            layoutApi?.scrollTo(i);
+                          }}
+                          className={cn(
+                            "h-1.5 rounded-full transition-all duration-300",
+                            layoutSlide === i
+                              ? "w-6 bg-[#F97316] shadow-sm"
+                              : "w-1.5 bg-slate-300 hover:bg-slate-400",
+                          )}
+                        />
+                      ))}
+                    </div>
+                    <div className="flex gap-2 overflow-x-auto pb-0.5 [scrollbar-width:thin]">
                       {activeLayouts.map((layout, i) => (
                         <button
                           key={layout.id ?? i}
@@ -271,8 +271,8 @@ export function FloorTower({
                           className={cn(
                             "relative h-16 w-20 shrink-0 overflow-hidden rounded-lg border-2 transition-all sm:h-[4.5rem] sm:w-28",
                             layoutSlide === i
-                              ? "border-[#F97316] shadow-lg ring-2 ring-[#F97316]/40"
-                              : "border-white/20 opacity-90 hover:border-white/50 hover:opacity-100",
+                              ? "border-[#F97316] shadow-md ring-2 ring-[#F97316]/30"
+                              : "border-slate-200 opacity-90 hover:border-slate-300 hover:opacity-100",
                           )}
                         >
                           <img

@@ -209,9 +209,13 @@ export default function ProjectDetailClient({ params }: ProjectDetailClientProps
     return (
         <div className="pt-16 md:pt-20 pb-20 bg-slate-50 min-h-screen">
             <Dialog open={progressPhoto != null} onOpenChange={(o) => !o && setProgressPhoto(null)}>
-                <DialogContent className="max-w-5xl p-0 overflow-hidden bg-black border-black">
+                <DialogContent className="w-[min(96vw,1680px)] max-w-[min(96vw,1680px)] max-h-[96vh] gap-0 overflow-hidden rounded-xl border border-slate-200 bg-white p-2 sm:max-w-[min(96vw,1680px)] sm:rounded-2xl sm:p-3 md:p-4">
                     {progressPhoto ? (
-                        <img src={progressPhoto} alt="" className="w-full max-h-[85vh] object-contain bg-black" />
+                        <img
+                            src={progressPhoto}
+                            alt=""
+                            className="mx-auto block max-h-[min(92vh,1400px)] w-full max-w-full object-contain bg-slate-50"
+                        />
                     ) : null}
                 </DialogContent>
             </Dialog>

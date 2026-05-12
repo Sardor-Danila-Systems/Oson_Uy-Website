@@ -176,13 +176,43 @@ function BuildingScene({
                   receiveShadow
                 >
                   <meshStandardMaterial
-                    color={hov ? "#bfdbfe" : idx % 2 === 0 ? "#e2e8f0" : "#f1f5f9"}
-                    roughness={0.45}
-                    metalness={0.05}
-                    emissive={hov ? "#3b82f6" : "#000000"}
-                    emissiveIntensity={hov ? 0.12 : 0}
+                    color={hov ? "#cbd5e1" : idx % 2 === 0 ? "#dce3ec" : "#e8edf4"}
+                    roughness={0.42}
+                    metalness={0.08}
+                    emissive={hov ? "#3b82f6" : "#0f172a"}
+                    emissiveIntensity={hov ? 0.1 : 0.02}
                   />
                 </RoundedBox>
+
+                {/* Фасад: «окна» и боковые пилоны */}
+                <mesh position={[-W * 0.46, 0, zFace - 0.015]} castShadow>
+                  <boxGeometry args={[0.06, SLAB_H * 0.92, 0.04]} />
+                  <meshStandardMaterial color="#94a3b8" roughness={0.55} metalness={0.12} />
+                </mesh>
+                <mesh position={[W * 0.46, 0, zFace - 0.015]} castShadow>
+                  <boxGeometry args={[0.06, SLAB_H * 0.92, 0.04]} />
+                  <meshStandardMaterial color="#94a3b8" roughness={0.55} metalness={0.12} />
+                </mesh>
+                {Array.from({ length: 5 }, (_, ci) =>
+                  Array.from({ length: 2 }, (_, ri) => {
+                    const cols = 5;
+                    const rows = 2;
+                    const tx = ((ci + 0.5) / cols - 0.5) * W * 0.72;
+                    const ty = ((ri + 0.5) / rows - 0.5) * SLAB_H * 0.62;
+                    return (
+                      <mesh key={`${f.id}-win-${ci}-${ri}`} position={[tx, ty, zFace + 0.012]}>
+                        <planeGeometry args={[W * 0.11, SLAB_H * 0.24]} />
+                        <meshStandardMaterial
+                          color="#0f172a"
+                          metalness={0.35}
+                          roughness={0.32}
+                          emissive={hov ? "#38bdf8" : "#1e3a5f"}
+                          emissiveIntensity={hov ? 0.45 : 0.18}
+                        />
+                      </mesh>
+                    );
+                  }),
+                ).flat()}
 
                 {/* Разделитель этажей — чёткая линия */}
                 <mesh position={[0, -SLAB_H / 2 - GAP * 0.35, zFace - 0.02]} receiveShadow>
@@ -190,23 +220,19 @@ function BuildingScene({
                   <meshStandardMaterial color="#94a3b8" roughness={0.5} />
                 </mesh>
 
-                <Html
-                  position={[W * 0.52 + 0.35, 0, 0]}
-                  center
-                  distanceFactor={6}
-                  style={{ pointerEvents: "none" }}
-                  zIndexRange={[200, 0]}
-                >
-                  <div
-                    className={`rounded-md border-2 px-2.5 py-1 font-black uppercase tracking-wide shadow-md ${
-                      hov
-                        ? "border-orange-400 bg-orange-500 text-white"
-                        : "border-slate-300 bg-white text-[#1E3A8A]"
-                    } text-[11px] sm:text-xs`}
+                {hov ? (
+                  <Html
+                    position={[0, SLAB_H * 0.42, zFace + 0.28]}
+                    center
+                    distanceFactor={8}
+                    style={{ pointerEvents: "none" }}
+                    zIndexRange={[200, 0]}
                   >
-                    {t("floorLabel", { n: f.floor })}
-                  </div>
-                </Html>
+                    <div className="rounded-md border-2 border-orange-400 bg-orange-500 px-2.5 py-1 text-[11px] font-black uppercase tracking-wide text-white shadow-lg sm:text-xs">
+                      {t("floorLabel", { n: f.floor })}
+                    </div>
+                  </Html>
+                ) : null}
               </group>
             );
           })}
