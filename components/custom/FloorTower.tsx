@@ -173,30 +173,30 @@ export function FloorTower({
         open={activeFloor !== null}
         onOpenChange={(open) => !open && setActiveFloor(null)}
       >
-        <DialogContent className="max-w-lg overflow-hidden rounded-[2rem] border-none p-0">
+        <DialogContent className="max-h-[min(92vh,880px)] w-[calc(100%-1rem)] max-w-6xl gap-0 overflow-hidden rounded-2xl border-none p-0 sm:max-w-6xl">
           {activeFloor ? (
-            <>
-              <div className="flex flex-col bg-slate-200">
-                <div className="relative aspect-[16/10] w-full overflow-hidden group">
+            <div className="flex max-h-[min(92vh,880px)] flex-col md:flex-row md:min-h-[440px]">
+              <div className="relative flex min-h-[220px] flex-1 flex-col bg-slate-900 md:min-h-[440px] md:w-[58%]">
+                <div className="relative min-h-[220px] flex-1 overflow-hidden group md:min-h-0">
                   {activeLayouts.length > 0 ? (
                     <>
                       <Carousel
                         key={activeFloor.id}
                         setApi={setLayoutApi}
                         opts={{ loop: true, align: "start" }}
-                        className="h-full w-full"
+                        className="h-full min-h-[220px] w-full md:absolute md:inset-0 md:min-h-full"
                       >
-                        <CarouselContent className="m-0 h-full flex">
+                        <CarouselContent className="m-0 flex h-full">
                           {activeLayouts.map((layout, idx) => (
                             <CarouselItem
                               key={layout.id ?? idx}
-                              className="p-0 h-full basis-full shrink-0 grow-0"
+                              className="h-full basis-full shrink-0 grow-0 p-0"
                             >
-                              <div className="relative h-full min-h-[180px] w-full bg-slate-200">
+                              <div className="relative flex min-h-[220px] w-full items-center justify-center bg-slate-800 md:min-h-[440px] md:h-full">
                                 <img
                                   src={layout.imageUrl}
                                   alt={layout.title ?? ""}
-                                  className="h-full w-full object-cover"
+                                  className="h-full max-h-[min(55vh,520px)] w-full object-contain md:max-h-none"
                                 />
                               </div>
                             </CarouselItem>
@@ -206,7 +206,7 @@ export function FloorTower({
 
                       {activeLayouts.length > 1 ? (
                         <>
-                          <div className="absolute inset-x-0 bottom-12 z-20 flex justify-center gap-1.5 md:bottom-14">
+                          <div className="absolute inset-x-0 bottom-3 z-20 flex justify-center gap-1.5 md:bottom-4">
                             {Array.from({ length: layoutCount }).map((_, i) => (
                               <button
                                 key={i}
@@ -232,7 +232,7 @@ export function FloorTower({
                               e.preventDefault();
                               layoutApi?.scrollPrev();
                             }}
-                            className="absolute left-3 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white opacity-0 backdrop-blur-md transition-all hover:bg-white/20 group-hover:opacity-100"
+                            className="absolute left-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/40 text-white backdrop-blur-sm transition-opacity hover:bg-black/55 md:opacity-0 md:group-hover:opacity-100"
                           >
                             <ChevronLeft className="h-5 w-5" />
                           </button>
@@ -243,31 +243,17 @@ export function FloorTower({
                               e.preventDefault();
                               layoutApi?.scrollNext();
                             }}
-                            className="absolute right-3 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white opacity-0 backdrop-blur-md transition-all hover:bg-white/20 group-hover:opacity-100"
+                            className="absolute right-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/40 text-white backdrop-blur-sm transition-opacity hover:bg-black/55 md:opacity-0 md:group-hover:opacity-100"
                           >
                             <ChevronRight className="h-5 w-5" />
                           </button>
                         </>
                       ) : null}
-
-                      <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-black/75 via-black/35 to-transparent p-5 pt-12 md:p-6 md:pt-16">
-                        <DialogHeader className="space-y-0 text-left">
-                          <DialogTitle className="text-xl font-black uppercase italic text-white md:text-2xl">
-                            {floorTitle(activeFloor)}
-                            {activeFloor.title ? ` · ${activeFloor.title}` : ""}
-                          </DialogTitle>
-                          {activeLayouts[layoutSlide]?.title ? (
-                            <p className="mt-1 text-sm font-semibold text-white/90">
-                              {activeLayouts[layoutSlide].title}
-                            </p>
-                          ) : null}
-                        </DialogHeader>
-                      </div>
                     </>
                   ) : (
-                    <div className="flex aspect-[16/10] h-full w-full flex-col items-center justify-center gap-2 bg-slate-100 px-6 text-center">
-                      <Building2 className="h-10 w-10 text-slate-300" />
-                      <p className="text-xs font-bold text-slate-500">
+                    <div className="flex min-h-[220px] w-full flex-col items-center justify-center gap-2 bg-slate-800 px-6 text-center md:min-h-[440px]">
+                      <Building2 className="h-12 w-12 text-slate-500" />
+                      <p className="text-sm font-bold text-slate-400">
                         {t("noLayouts")}
                       </p>
                     </div>
@@ -275,15 +261,15 @@ export function FloorTower({
                 </div>
 
                 {activeLayouts.length > 1 ? (
-                  <div className="border-t border-white/10 bg-black/35 px-2 py-2.5 backdrop-blur-md md:px-3 md:py-3">
-                    <div className="flex gap-2 overflow-x-auto pb-0.5 [-ms-overflow-style:none] [scrollbar-width:thin]">
+                  <div className="shrink-0 border-t border-white/10 bg-black/40 px-2 py-2 backdrop-blur-md md:px-3 md:py-3">
+                    <div className="flex gap-2 overflow-x-auto pb-0.5">
                       {activeLayouts.map((layout, i) => (
                         <button
                           key={layout.id ?? i}
                           type="button"
                           onClick={() => layoutApi?.scrollTo(i)}
                           className={cn(
-                            "relative h-14 w-[5.5rem] shrink-0 overflow-hidden rounded-xl border-2 transition-all md:h-16 md:w-24",
+                            "relative h-16 w-20 shrink-0 overflow-hidden rounded-lg border-2 transition-all sm:h-[4.5rem] sm:w-28",
                             layoutSlide === i
                               ? "border-[#F97316] shadow-lg ring-2 ring-[#F97316]/40"
                               : "border-white/20 opacity-90 hover:border-white/50 hover:opacity-100",
@@ -300,26 +286,44 @@ export function FloorTower({
                   </div>
                 ) : null}
               </div>
-              <div className="space-y-4 p-6 md:p-8">
-                <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
-                  <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">
-                    {t("pricePerM2")}
-                  </p>
-                  <p className="mt-1 text-lg font-black text-[#1E3A8A]">
-                    {formatUzsPerM2(activeFloor.pricePerM2)}
-                  </p>
+
+              <div className="flex flex-1 flex-col justify-between gap-6 overflow-y-auto bg-white p-6 md:w-[42%] md:max-w-md md:p-8">
+                <div className="space-y-4">
+                  <DialogHeader className="space-y-2 text-left">
+                    <DialogTitle className="text-xl font-black uppercase tracking-tight text-[#1E3A8A] md:text-2xl">
+                      {floorTitle(activeFloor)}
+                      {activeFloor.title ? ` · ${activeFloor.title}` : ""}
+                    </DialogTitle>
+                    {activeLayouts[layoutSlide]?.title ? (
+                      <p className="text-sm font-semibold text-slate-600">
+                        {activeLayouts[layoutSlide].title}
+                      </p>
+                    ) : null}
+                  </DialogHeader>
+
+                  <div className="space-y-3">
+                    <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
+                      <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">
+                        {t("pricePerM2")}
+                      </p>
+                      <p className="mt-1 text-lg font-black text-[#1E3A8A] md:text-xl">
+                        {formatUzsPerM2(activeFloor.pricePerM2)}
+                      </p>
+                    </div>
+                    <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
+                      <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">
+                        {t("areaVariants")}
+                      </p>
+                      <p className="mt-2 text-base font-black leading-relaxed text-[#1E3A8A]">
+                        {areaChipsText(activeFloor)}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
-                  <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">
-                    {t("areaVariants")}
-                  </p>
-                  <p className="mt-2 text-base font-black leading-relaxed text-[#1E3A8A]">
-                    {areaChipsText(activeFloor)}
-                  </p>
-                </div>
+
                 <Button
                   type="button"
-                  className="h-14 w-full rounded-2xl bg-[#F97316] text-base font-black uppercase tracking-wide text-white shadow-lg shadow-orange-900/15 hover:bg-orange-600"
+                  className="h-14 w-full shrink-0 rounded-2xl bg-[#F97316] text-base font-black uppercase tracking-wide text-white shadow-lg shadow-orange-900/15 hover:bg-orange-600"
                   onClick={() => {
                     setLeadFloorId(activeFloor.id);
                     setActiveFloor(null);
@@ -329,7 +333,7 @@ export function FloorTower({
                   {t("cta")}
                 </Button>
               </div>
-            </>
+            </div>
           ) : null}
         </DialogContent>
       </Dialog>

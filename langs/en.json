@@ -14,7 +14,13 @@
     "projectTitle": "{name} — new building in {location}",
     "projectDescription": "{name}: new residential complex in {place}. Delivery: {delivery}. Prices per m² and floor plans on Oson Uy — request a consultation.",
     "ogImageAlt": "Oson Uy — new buildings in Uzbekistan",
-    "twitterSite": "@osonuy"
+    "twitterSite": "@osonuy",
+    "privacyTitle": "Privacy Policy — Oson Uy",
+    "privacyDescription": "How Oson Uy handles personal data and inquiries.",
+    "termsTitle": "Terms of Use — Oson Uy",
+    "termsDescription": "Rules for using the Oson Uy website and services.",
+    "faqTitle": "FAQ — Oson Uy",
+    "faqDescription": "Answers about the new-build catalog and requests."
   },
   "Cabinet": {
     "loginTitle": "Buyer cabinet",
@@ -135,17 +141,18 @@
     "readyToAssist": "Ready to assist you"
   },
   "Footer": {
-    "description": "The most trusted primary real estate platform in Uzbekistan. Connecting you with premium living spaces.",
-    "company": "Company",
-    "legal": "Legal",
-    "support": "Support",
-    "about": "About Us",
-    "contact": "Contact",
+    "description": "Primary real estate platform in Uzbekistan: project catalog, developer leads, and a buyer cabinet.",
+    "navTitle": "Navigation",
+    "legalTitle": "Legal",
+    "contactsTitle": "Contacts",
+    "about": "About",
     "privacy": "Privacy Policy",
-    "terms": "Terms of Service",
+    "terms": "Terms of Use",
     "faq": "FAQ",
-    "helpDesk": "Help Desk",
-    "copyright": "© 2024 Oson Uy Real Estate. Primary Market Specialist."
+    "phoneLabel": "Phone",
+    "instagramLabel": "Instagram",
+    "phonePlaceholder": "Phone number will be published soon",
+    "copyright": "© 2026 Oson Uy. All rights reserved."
   },
   "ProjectCard": {
     "popular": "Popular",
@@ -229,7 +236,7 @@
   },
   "FloorTower": {
     "title": "Scale-model block",
-    "description": "A static 3D facade: brick, beige accents, lit windows, plinth, entrance canopies, and lawn patches. Fixed camera—no orbit.",
+    "description": "Schematic 3D floor stack: hover or click a floor on the model or pick a chip below.",
     "hint": "Click a floor on the model or use the chips below.",
     "pickerHint": "Or pick a floor",
     "placeholderMore": "About {count} more storeys are empty in the developer dashboard for this project.",
@@ -256,5 +263,63 @@
     "submit": "Submit rating",
     "errorRating": "Please select a rating (stars)",
     "errorSubmit": "Failed to send feedback"
+  },
+  "Faq": {
+    "title": "Frequently asked questions",
+    "subtitle": "How Oson Uy works in brief",
+    "items": {
+      "q1": {
+        "question": "What is Oson Uy?",
+        "answer": "A catalog of new buildings and a way to reach developers: you browse projects, floors and prices, submit a request, and the developer receives your contact in their dashboard."
+      },
+      "q2": {
+        "question": "Does it cost anything to submit a request?",
+        "answer": "Submitting a request on the site is free for buyers. Purchase terms and payments are agreed directly with the developer."
+      },
+      "q3": {
+        "question": "Where do prices and layouts come from?",
+        "answer": "Data is published by the developer in their workspace. We display what they entered for floors and units; for legal accuracy rely on the developer's official documents."
+      },
+      "q4": {
+        "question": "How do I sign in to the buyer cabinet?",
+        "answer": "You need the phone number and access code issued by the developer after reservation or contract. Without them, cabinet sign-in is not available."
+      },
+      "q5": {
+        "question": "How can I contact Oson Uy support?",
+        "answer": "Message us on Instagram or call the phone number in the site footer — we will help with the catalog and requests."
+      }
+    }
+  },
+  "Legal": {
+    "privacy": {
+      "h1": "Privacy Policy",
+      "updated": "Last updated: May 2026",
+      "intro": "This document describes how personal data may be processed on Oson Uy. For legally binding wording, please review with your counsel.",
+      "s1Title": "1. Data we may collect",
+      "s1Body": "When you submit a request: name, phone, selected project and message. Buyer cabinet sign-in: phone and session data required for authentication. Technical data: IP, browser type, cookies needed for the site to function.",
+      "s2Title": "2. Purposes",
+      "s2Body": "Processing requests and sharing contact details with the developer, improving the service, security and abuse prevention.",
+      "s3Title": "3. Sharing with third parties",
+      "s3Body": "Request contacts may be shared with the developer of the selected project. Other sharing occurs only where required by law or with your consent.",
+      "s4Title": "4. Retention and security",
+      "s4Body": "We apply reasonable organizational and technical safeguards. Retention depends on the need for the purposes described above.",
+      "s5Title": "5. Your choices",
+      "s5Body": "You may ask questions about processing via the contacts in the footer. Refusing some cookies may limit certain site features."
+    },
+    "terms": {
+      "h1": "Terms of Use",
+      "updated": "Last updated: May 2026",
+      "intro": "By using Oson Uy you agree to the terms below. If you disagree, please do not use the service.",
+      "s1Title": "1. Role of the platform",
+      "s1Body": "Oson Uy provides an informational catalog and technical tools for requests. A property purchase agreement is between the buyer and the developer; the platform is not a party to the transaction.",
+      "s2Title": "2. Accuracy of information",
+      "s2Body": "Projects, prices and layouts are published by developers. Always verify current terms with the developer before making a decision.",
+      "s3Title": "3. Requests and communication",
+      "s3Body": "By submitting a request you confirm that your contact details are accurate and you agree to be contacted by the developer or an Oson Uy representative regarding that request.",
+      "s4Title": "4. Limitation of liability",
+      "s4Body": "The service is provided \"as is\". We are not liable for losses caused by developers or third parties except where expressly required by law.",
+      "s5Title": "5. Changes",
+      "s5Body": "We may update these terms; the current version is published on this page. Continued use after updates means you accept the new version."
+    }
   }
 }

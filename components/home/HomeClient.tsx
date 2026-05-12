@@ -11,6 +11,7 @@ import { useTranslations } from "next-intl";
 import { FilterBar } from "@/components/custom/FilterBar";
 import { formatUzPhoneInput } from "@/lib/phone";
 import { minPricePerM2FromApiProject } from "@/lib/project-price";
+import { HomeFaqSection } from "@/components/home/HomeFaqSection";
 
 const REGION_VIDEOS: Record<string, string> = {
     "Tashkent City (г. Ташкент)": "/videos/tashkent.mp4",
@@ -274,6 +275,8 @@ export default function HomeClient() {
                     </div>
                 </div>
             </section>
+
+            <HomeFaqSection />
 
             <LeadModal
                 isOpen={isModalOpen}

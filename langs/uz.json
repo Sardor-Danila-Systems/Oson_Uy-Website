@@ -14,7 +14,13 @@
     "projectTitle": "{name} — {location} dagi yangi uy",
     "projectDescription": "{name}: {place} dagi yangi turar-joy majmuasi. Topshirish: {delivery}. m² narxlari va rejalashtirish Oson Uy da — maslahat so'rang.",
     "ogImageAlt": "Oson Uy — O'zbekistonda yangi uylar",
-    "twitterSite": "@osonuy"
+    "twitterSite": "@osonuy",
+    "privacyTitle": "Maxfiylik siyosati — Oson Uy",
+    "privacyDescription": "Oson Uy foydalanuvchi ma'lumotlari va arizalar bilan qanday ishlaydi.",
+    "termsTitle": "Foydalanish shartlari — Oson Uy",
+    "termsDescription": "Oson Uy sayti va xizmatlaridan foydalanish qoidalari.",
+    "faqTitle": "Tez-tez beriladigan savollar — Oson Uy",
+    "faqDescription": "Yangi uylar katalogi va arizalar bo'yicha javoblar."
   },
   "Cabinet": {
     "loginTitle": "Xaridor kabineti",
@@ -135,17 +141,18 @@
     "readyToAssist": "Sizga yordamga tayyormiz"
   },
   "Footer": {
-    "description": "O'zbekistondagi birlamchi ko'chmas mulk bo'yicha eng ishonchli platforma. Sizni eng yaxshi yashash joylari bilan bog'laymiz.",
-    "company": "Kompaniya",
-    "legal": "Huquqiy",
-    "support": "Qo'llab-quvvatlash",
+    "description": "O'zbekistonda birlamchi ko'chmas mulk: JK katalogi, quruvchilarga arizalar va xaridor kabineti.",
+    "navTitle": "Navigatsiya",
+    "legalTitle": "Hujjatlar",
+    "contactsTitle": "Aloqa",
     "about": "Biz haqimizda",
-    "contact": "Aloqa",
     "privacy": "Maxfiylik siyosati",
     "terms": "Foydalanish shartlari",
-    "faq": "FAQ",
-    "helpDesk": "Yordam markazi",
-    "copyright": "© 2024 Oson Uy Real Estate. Birlamchi bozor mutaxassisi."
+    "faq": "Savollar-javoblar",
+    "phoneLabel": "Telefon",
+    "instagramLabel": "Instagram",
+    "phonePlaceholder": "Telefon raqami tez orada saytda ko'rsatiladi",
+    "copyright": "© 2026 Oson Uy. Barcha huquqlar himoyalangan."
   },
   "ProjectCard": {
     "popular": "Mashhur",
@@ -229,7 +236,7 @@
   },
   "FloorTower": {
     "title": "Uy maketi",
-    "description": "Statik 3D fasad: g'isht, bej aksentlar, derazalar, sokil, kirish naveslari va maysazorlar. Kamera aylanmaydi.",
+    "description": "Qavatlar bo'yicha sxematik 3D: modelda qavatni bosing yoki pastdagi tugmalardan tanlang.",
     "hint": "Modeldagi qavatni yoki pastdagi tugmalarni bosing.",
     "pickerHint": "Yoki qavatni tanlang",
     "placeholderMore": "Loyiha bo'yicha yana taxminan {count} qavat kabinetda to'ldirilmagan.",
@@ -256,5 +263,63 @@
     "submit": "Bahoni yuborish",
     "errorRating": "Iltimos, bahoni tanlang (yulduzchalar)",
     "errorSubmit": "Fikr yuborishda xatolik yuz berdi"
+  },
+  "Faq": {
+    "title": "Tez-tez beriladigan savollar",
+    "subtitle": "Oson Uy qanday ishlaydi — qisqacha",
+    "items": {
+      "q1": {
+        "question": "Oson Uy nima?",
+        "answer": "Yangi uylar katalogi va quruvchilar bilan bog'lanish: loyiha, qavat va narxlarni ko'rasiz, ariza qoldirasiz, quruvchi o'z kabinetida kontaktingizni oladi."
+      },
+      "q2": {
+        "question": "Ariza qoldirish pullikmi?",
+        "answer": "Xaridor uchun saytda ariza bepul. Xarid va to'lov shartlari to'g'ridan-to'g'ri quruvchi bilan kelishiladi."
+      },
+      "q3": {
+        "question": "Narxlar va rejalar qayerdan?",
+        "answer": "Ma'lumotlarni quruvchi kabinetida joylashtiradi. Biz quruvchi ko'rsatgan qavat va kvartira ma'lumotlarini chiqaramiz; rasmiy hujjatlar uchun quruvchiga taylaning."
+      },
+      "q4": {
+        "question": "Xaridor kabinetiga qanday kiraman?",
+        "answer": "Telefon va kirish kodi kerak — ularni quruvchi bron yoki shartnomadan keyin beradi. Bu ma'lumotsiz kirish mumkin emas."
+      },
+      "q5": {
+        "question": "Oson Uy qo'llab-quvvatlashiga qanday chiqaman?",
+        "answer": "Instagramdan yozing yoki sayt pastidagi telefon raqamiga qo'ng'iroq qiling — katalog va arizalar bo'yicha yordam beramiz."
+      }
+    }
+  },
+  "Legal": {
+    "privacy": {
+      "h1": "Maxfiylik siyosati",
+      "updated": "Yangilangan: 2026 yil may",
+      "intro": "Ushbu hujjat Oson Uy saytida shaxsiy ma'lumotlarni qayta ishlashning umumiy tartibini tasvirlaydi. Huquqiy matn uchun yurist bilan kelishish tavsiya etiladi.",
+      "s1Title": "1. Qanday ma'lumotlar yig'ilishi mumkin",
+      "s1Body": "Ariza yuborishda: ism, telefon, tanlangan loyiha va xabar. Kabinetga kirishda: telefon va sessiya ma'lumotlari. Texnik: IP, brauzer turi, sayt ishlashi uchun cookie.",
+      "s2Title": "2. Maqsadlar",
+      "s2Body": "Arizalarni qayta ishlash va kontaktni quruvchiga uzatish, xizmatni yaxshilash, xavfsizlik va suiiste'mollikning oldini olish.",
+      "s3Title": "3. Uchinchi shaxslarga uzatish",
+      "s3Body": "Ariza kontakti tanlangan loyiha quruvchisiga berilishi mumkin. Boshqa uzatishlar faqat qonun yoki roziligingiz bilan.",
+      "s4Title": "4. Saqlash va xavfsizlik",
+      "s4Body": "Mantiqiy tashkiliy va texnik choralarni qo'llaymiz. Saqlash muddati yuqoridagi maqsadlar uchun zaruratga bog'liq.",
+      "s5Title": "5. Sizning harakatlaringiz",
+      "s5Body": "Pastki qismdagi aloqa orqali qayta ishlash bo'yicha savol berishingiz mumkin. Cookie rad etilishi ayrim funksiyalarni cheklashi mumkin."
+    },
+    "terms": {
+      "h1": "Foydalanish shartlari",
+      "updated": "Yangilangan: 2026 yil may",
+      "intro": "Oson Uy dan foydalanish bilan quyidagi shartlarga rozilik bildirasiz. Rozi bo'lmasangiz, xizmatdan foydalanmang.",
+      "s1Title": "1. Platformaning roli",
+      "s1Body": "Oson Uy ma'lumot katalogi va arizalar uchun texnik vositalarni beradi. Ko'chmas mulk bitimi xaridor va quruvchi o'rtasida; platforma tomon emas.",
+      "s2Title": "2. Ma'lumot aniqligi",
+      "s2Body": "Loyihalar, narxlar va rejalar quruvchilar tomonidan joylashtiriladi. Qaror qabulidan oldin quruvchidan tekshiring.",
+      "s3Title": "3. Arizalar va aloqa",
+      "s3Body": "Ariza yuborish bilan kontaktlaringiz to'g'riligini tasdiqlaysiz va ushbu ariza bo'yicha quruvchi yoki Oson Uy vakili bilan bog'lanishga rozilik berasiz.",
+      "s4Title": "4. Mas'uliyat cheklovi",
+      "s4Body": "Xizmat «boricha» taqdim etiladi. Quruvchi yoki uchinchi shaxslarning harakatidan yetkazilgan zarar uchun, qonunda bevosita ko'rsatilgan hollar bundan mustasno, javobgar emasmiz.",
+      "s5Title": "5. O'zgarishlar",
+      "s5Body": "Shartlarni yangilashimiz mumkin; joriy versiya shu sahifada. Yangilashdan keyin foydalanish davom ettirish yangi matnga rozilik hisoblanadi."
+    }
   }
 }
