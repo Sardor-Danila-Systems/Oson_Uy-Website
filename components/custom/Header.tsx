@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import { CiGlobe } from "react-icons/ci";
 import { cn } from '@/lib/utils';
+import { BRAND_LOGO_WEB_REMOVEDBG } from '@/lib/brand';
 import { useLocale, useTranslations } from 'next-intl';
 import { useRouter, usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
@@ -50,10 +51,19 @@ export default function Header() {
         >
             <div className="container mx-auto flex w-full max-w-[1250px] items-center justify-between md:grid md:grid-cols-[1fr_auto_1fr] px-5">
                 {/* Mobile: Left | Desktop: Left */}
-                <Link href="/" className="flex items-center gap-2 order-1 md:order-1 transition-transform active:scale-95">
-                    <span className="text-xl md:text-2xl font-black tracking-tighter text-[#1E3A8A]">
-                        {t("brand").slice(0, 4)}<span className="text-[#F97316]">{t("brand").slice(4)}</span>
-                    </span>
+                <Link
+                    href="/"
+                    aria-label={t("brand")}
+                    className="order-1 flex shrink-0 items-center transition-transform active:scale-95 md:order-1"
+                >
+                    <Image
+                        src={BRAND_LOGO_WEB_REMOVEDBG}
+                        alt=""
+                        width={216}
+                        height={52}
+                        className="h-9 w-auto max-h-10 max-w-[min(46vw,210px)] shrink-0 object-contain object-left md:h-[2.375rem] md:max-w-[268px]"
+                        priority
+                    />
                 </Link>
 
                 {/* Desktop: Center Navigation */}

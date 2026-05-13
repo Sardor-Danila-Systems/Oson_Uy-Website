@@ -6,6 +6,7 @@ import Footer from "@/components/custom/Footer";
 import "./globals.css";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { BRAND_IMAGE_ICON_PATH, BRAND_IMAGE_OG_PATH } from "@/lib/brand";
 import { absoluteUrl, getSiteUrl } from "@/lib/site";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
@@ -17,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
-  const ogImage = absoluteUrl("/osonuy-logo-removebg-preview.png");
+  const ogImage = absoluteUrl(BRAND_IMAGE_OG_PATH);
   const locale = await getLocale();
 
   return {
@@ -39,8 +40,6 @@ export async function generateMetadata(): Promise<Metadata> {
       images: [
         {
           url: ogImage,
-          width: 800,
-          height: 800,
           alt: t("ogImageAlt"),
         },
       ],
@@ -53,9 +52,9 @@ export async function generateMetadata(): Promise<Metadata> {
       site: t("twitterSite") || undefined,
     },
     icons: {
-      icon: "/icon.png",
-      shortcut: "/icon.png",
-      apple: "/icon.png",
+      icon: BRAND_IMAGE_ICON_PATH,
+      shortcut: BRAND_IMAGE_ICON_PATH,
+      apple: BRAND_IMAGE_ICON_PATH,
     },
     robots: {
       index: true,

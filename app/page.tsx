@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import HomeClient from "@/components/home/HomeClient";
+import { BRAND_IMAGE_OG_PATH } from "@/lib/brand";
 import { absoluteUrl, getSiteUrl } from "@/lib/site";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -12,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
-  const ogImage = absoluteUrl("/osonuy-logo-removebg-preview.png");
+  const ogImage = absoluteUrl(BRAND_IMAGE_OG_PATH);
   const locale = await getLocale();
 
   return {
@@ -27,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: t("siteName"),
       locale,
       type: "website",
-      images: [{ url: ogImage, width: 800, height: 800, alt: t("ogImageAlt") }],
+      images: [{ url: ogImage, alt: t("ogImageAlt") }],
     },
     twitter: {
       card: "summary_large_image",
@@ -51,7 +52,7 @@ export default function HomePage() {
         url: siteUrl,
         logo: {
           "@type": "ImageObject",
-          url: absoluteUrl("/osonuy-logo-removebg-preview.png"),
+          url: absoluteUrl(BRAND_IMAGE_OG_PATH),
         },
       },
       {

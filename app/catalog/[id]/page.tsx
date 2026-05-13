@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, getLocale } from "next-intl/server";
 import ProjectDetailClient from "./ProjectDetailClient";
+import { BRAND_IMAGE_OG_PATH } from "@/lib/brand";
 import { absoluteUrl, getSiteUrl } from "@/lib/site";
 import { fetchProjectJsonLd } from "@/lib/project-jsonld";
 
@@ -19,7 +20,7 @@ export async function generateMetadata({
 
   let title = t("defaultTitle");
   let description = t("defaultDescription");
-  let ogImage = absoluteUrl("/osonuy-logo-removebg-preview.png");
+  let ogImage = absoluteUrl(BRAND_IMAGE_OG_PATH);
 
   try {
     const res = await fetch(`${apiUrl}/projects/${id}/full`, {

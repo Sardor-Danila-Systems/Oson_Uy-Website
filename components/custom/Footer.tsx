@@ -1,12 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { BRAND_LOGO_WEB_REMOVEDBG } from "@/lib/brand";
 
 const INSTAGRAM_URL = "https://www.instagram.com/oson_uy.uz/";
 
 export default function Footer() {
   const t = useTranslations("Footer");
+  const tSeo = useTranslations("Seo");
   const phone =
     typeof process !== "undefined" && process.env.NEXT_PUBLIC_CONTACT_PHONE
       ? process.env.NEXT_PUBLIC_CONTACT_PHONE.trim()
@@ -17,9 +20,19 @@ export default function Footer() {
     <footer className="mt-auto w-full border-t border-slate-200 bg-slate-50 py-14 md:py-16">
       <div className="container mx-auto grid max-w-6xl grid-cols-1 gap-12 px-4 md:grid-cols-12 md:gap-10 md:px-8">
         <div className="space-y-4 md:col-span-5">
-          <span className="text-xl font-bold tracking-tight text-[#1E3A8A]">
-            Oson<span className="text-[#F97316]">Uy</span>
-          </span>
+          <Link
+            href="/"
+            aria-label={tSeo("siteName")}
+            className="inline-flex max-w-full transition-opacity hover:opacity-90"
+          >
+            <Image
+              src={BRAND_LOGO_WEB_REMOVEDBG}
+              alt=""
+              width={232}
+              height={56}
+              className="h-10 w-auto max-w-[min(86%,268px)] object-contain object-left md:h-[2.625rem] md:max-w-[296px]"
+            />
+          </Link>
           <p className="max-w-md text-sm font-medium leading-relaxed text-slate-600">
             {t("description")}
           </p>

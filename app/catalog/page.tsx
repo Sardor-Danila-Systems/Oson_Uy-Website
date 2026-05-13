@@ -4,6 +4,7 @@ import { FilterDrawer } from "@/components/custom/FilterDrawer";
 import { ProjectGrid } from "@/components/custom/ProjectGrid";
 import { Project } from "@/types";
 import { minPricePerM2FromApiProject } from "@/lib/project-price";
+import { BRAND_IMAGE_OG_PATH } from "@/lib/brand";
 import { absoluteUrl, getSiteUrl } from "@/lib/site";
 
 type CatalogPageProps = {
@@ -19,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
-  const ogImage = absoluteUrl("/osonuy-logo-removebg-preview.png");
+  const ogImage = absoluteUrl(BRAND_IMAGE_OG_PATH);
   const locale = await getLocale();
   const canonical = `${siteUrl}/catalog`;
 
@@ -35,7 +36,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: t("siteName"),
       locale,
       type: "website",
-      images: [{ url: ogImage, width: 800, height: 800, alt: t("ogImageAlt") }],
+      images: [{ url: ogImage, alt: t("ogImageAlt") }],
     },
     twitter: {
       card: "summary_large_image",

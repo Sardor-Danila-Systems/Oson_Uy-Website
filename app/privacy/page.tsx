@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
+import { BRAND_IMAGE_OG_PATH } from "@/lib/brand";
 import { absoluteUrl, getSiteUrl } from "@/lib/site";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -9,7 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const description = t("privacyDescription");
   const locale = await getLocale();
   const canonical = `${siteUrl}/privacy`;
-  const ogImage = absoluteUrl("/osonuy-logo-removebg-preview.png");
+  const ogImage = absoluteUrl(BRAND_IMAGE_OG_PATH);
 
   return {
     title,
@@ -22,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: t("siteName"),
       locale,
       type: "website",
-      images: [{ url: ogImage, width: 800, height: 800, alt: t("ogImageAlt") }],
+      images: [{ url: ogImage, alt: t("ogImageAlt") }],
     },
   };
 }
