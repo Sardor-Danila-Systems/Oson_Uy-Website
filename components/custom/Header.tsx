@@ -10,7 +10,7 @@ import { BRAND_LOGO_WEB_REMOVEDBG } from '@/lib/brand';
 import { useLocale, useTranslations } from 'next-intl';
 import { useRouter, usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
-import { Drawer, DrawerContent, DrawerHeader, DrawerClose } from '../ui/drawer';
+import { Drawer, DrawerContent, DrawerHeader, DrawerClose, DrawerTitle } from '../ui/drawer';
 
 export default function Header() {
     const t = useTranslations("Header");
@@ -99,7 +99,7 @@ export default function Header() {
 
                     <button
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        className="md:hidden p-2 text-[#1E3A8A] hover:bg-slate-100 rounded-xl transition-all active:scale-95"
+                        className="md:hidden p-2 text-[#1E3A8A] hover:bg-slate-100 rounded-xl transition-all active:scale-95 cursor-pointer"
                         aria-label="Toggle menu"
                     >
                         {isMenuOpen ? <X className="h-7 w-7" /> : <Menu className="h-7 w-7" />}
@@ -111,16 +111,24 @@ export default function Header() {
             <Drawer open={isMenuOpen} onOpenChange={setIsMenuOpen} direction="right">
                 <DrawerContent className="h-screen top-0 right-0 left-auto mt-0 w-[280px] rounded-none border-l shadow-2xl outline-none">
                     <div className="flex flex-col h-full bg-white">
+                        <DrawerTitle></DrawerTitle>
                         <DrawerHeader className="border-b p-5 flex justify-between items-center text-left">
-                            <div className="flex items-center gap-2">
-                                <div className="flex items-center gap-2">
-                                    <span className="text-xl font-bold tracking-tight text-[#1E3A8A]">
-                                        Oson<span className="text-[#F97316]">Uy</span>
-                                    </span>
-                                </div>
-                            </div>
+                            <Link
+                                href="/"
+                                aria-label={t("brand")}
+                                className="order-1 flex shrink-0 items-center transition-transform active:scale-95 md:order-1"
+                            >
+                                <Image
+                                    src={BRAND_LOGO_WEB_REMOVEDBG}
+                                    alt=""
+                                    width={216}
+                                    height={52}
+                                    className="h-9 w-auto max-h-10 max-w-[min(46vw,210px)] shrink-0 object-contain object-left md:h-[2.375rem] md:max-w-[268px]"
+                                    priority
+                                />
+                            </Link>
                             <DrawerClose asChild>
-                                <button className="p-2 rounded-full hover:bg-slate-100 transition-colors">
+                                <button className="p-2 rounded-full hover:bg-slate-100 transition-colors cursor-pointer">
                                     <X className="h-5 w-5 text-slate-400" />
                                 </button>
                             </DrawerClose>
@@ -170,7 +178,7 @@ export default function Header() {
                                             setIsMenuOpen(false);
                                         }}
                                         className={cn(
-                                            "px-4 py-2 rounded-lg text-sm font-bold border transition-all",
+                                            "px-4 py-2 rounded-lg text-sm font-bold border transition-all cursor-pointer",
                                             locale === lang.code
                                                 ? "bg-[#1E3A8A] border-[#1E3A8A] text-white shadow-lg shadow-blue-900/20"
                                                 : "bg-white border-slate-200 text-slate-600 hover:border-blue-200"
