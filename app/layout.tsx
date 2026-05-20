@@ -8,6 +8,7 @@ import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { BRAND_IMAGE_ICON_PATH, BRAND_IMAGE_OG_PATH } from "@/lib/brand";
 import { absoluteUrl, getSiteUrl } from "@/lib/site";
+import YandexMetrika from "@/components/YandexMetrika";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -86,6 +87,7 @@ export default async function RootLayout({
       <head>
       </head>
       <body>
+        <YandexMetrika />
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Header />
           <main className="pt-16">{children}</main>
