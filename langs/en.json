@@ -78,7 +78,14 @@
     "negotiable": "Price on request",
     "empty": "No complexes in this region yet.",
     "legend": "More complexes — darker",
-    "approxNote": "Some pins are approximate (placed by district)"
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "reset": "Show the whole region",
+    "openComplex": "Open complex",
+    "close": "Close",
+    "gestureMouse": "Scroll to zoom, drag to move the map",
+    "gestureTouch": "Pinch to zoom, drag to move the map",
+    "approxNote": "Light orange pins are approximate"
   },
   "Header": {
     "home": "Home",

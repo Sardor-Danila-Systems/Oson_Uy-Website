@@ -16,25 +16,61 @@ export type GeoRegion = {
 
 export const REGIONS = geo.regions as GeoRegion[];
 
-export const UZB_BBOX: [number, number, number, number] = [60, -875, 1375, 0];
+export const UZB_BBOX = geo.bbox as [number, number, number, number];
 
-/** Label anchors where the polygon centroid would collide or fall outside the shape. */
-export const LABEL_OVERRIDES: Record<string, [number, number]> = {
-  "tashkent-region": [1120, -490],
-  "tashkent-city": [1068, -429],
-  namangan: [1214, -428],
-  andijan: [1306, -372],
-  fergana: [1214, -330],
-  syrdarya: [1012, -362],
-  karakalpakstan: [280, -640],
-  navoiy: [690, -500],
+const WORLD = geo.world as number;
+const [ORIGIN_X, ORIGIN_Y] = geo.origin as [number, number];
+
+/** WGS84 → map units (Web Mercator, so raster tiles line up with the vector shapes). */
+export function project(lat: number, lon: number): [number, number] {
+  const x = ((lon + 180) / 360) * WORLD;
+  const y = (0.5 - Math.log(Math.tan(Math.PI / 4 + (lat * Math.PI) / 360)) / (2 * Math.PI)) * WORLD;
+  return [x - ORIGIN_X, y - ORIGIN_Y];
+}
+
+/** Label anchors (lat, lon) where the polygon centroid would collide or fall outside the shape. */
+const LABEL_LATLON: Record<string, [number, number]> = {
+  "tashkent-region": [41.9, 69.95],
+  "tashkent-city": [41.29, 69.25],
+  namangan: [41.28, 71.2],
+  andijan: [40.72, 72.43],
+  fergana: [40.3, 71.2],
+  syrdarya: [40.62, 68.5],
+  karakalpakstan: [43.4, 58.74],
+  navoiy: [42.0, 64.2],
 };
 
-const LON_SCALE = Math.cos((41.5 * Math.PI) / 180);
+export const LABEL_OVERRIDES: Record<string, [number, number]> = Object.fromEntries(
+  Object.entries(LABEL_LATLON).map(([id, [lat, lon]]) => [id, project(lat, lon)]),
+);
 
-/** WGS84 → map units (same projection as the geodata). */
-export function project(lat: number, lon: number): [number, number] {
-  return [(lon - 55) * LON_SCALE * 100, -(lat - 37) * 100];
+export type TileSpec = { key: string; x: number; y: number; size: number; url: string };
+
+const TILE_URL =
+  process.env.NEXT_PUBLIC_MAP_TILES_URL ?? "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
+
+/** Raster tiles covering the viewBox, at a zoom matched to `unitsPerPx`. */
+export function tilesFor(vb: [number, number, number, number], unitsPerPx: number): TileSpec[] {
+  const z = Math.max(5, Math.min(18, Math.round(Math.log2(WORLD / (256 * unitsPerPx)))));
+  const n = 2 ** z;
+  const size = WORLD / n;
+  const col0 = Math.floor((vb[0] + ORIGIN_X) / size);
+  const col1 = Math.floor((vb[0] + vb[2] + ORIGIN_X) / size);
+  const row0 = Math.floor((vb[1] + ORIGIN_Y) / size);
+  const row1 = Math.floor((vb[1] + vb[3] + ORIGIN_Y) / size);
+  const out: TileSpec[] = [];
+  for (let c = Math.max(0, col0); c <= Math.min(n - 1, col1); c++) {
+    for (let r = Math.max(0, row0); r <= Math.min(n - 1, row1); r++) {
+      out.push({
+        key: `${z}/${c}/${r}`,
+        x: c * size - ORIGIN_X,
+        y: r * size - ORIGIN_Y,
+        size,
+        url: TILE_URL.replace("{z}", String(z)).replace("{x}", String(c)).replace("{y}", String(r)),
+      });
+    }
+  }
+  return out.length > 60 ? [] : out;
 }
 
 export function regionName(r: GeoRegion, locale: string): string {
@@ -112,6 +148,8 @@ export type ApiProjectLike = {
   district?: string | null;
   imageUrl?: string | null;
   mapEmbedUrl?: string | null;
+  latitude?: number | string | null;
+  longitude?: number | string | null;
   deliveryDate?: string | null;
   hasInstallment?: boolean;
   [k: string]: unknown;
@@ -147,7 +185,11 @@ export function toMapProject(
   if (!region) return null;
   const id = String(p.id);
 
-  const exact = coordsFromMapUrl(p.mapEmbedUrl);
+  const lat = Number(p.latitude);
+  const lon = Number(p.longitude);
+  const fromFields: [number, number] | null =
+    p.latitude != null && p.longitude != null && lat > 36 && lat < 46 && lon > 55 && lon < 74 ? [lat, lon] : null;
+  const exact = fromFields ?? coordsFromMapUrl(p.mapEmbedUrl);
   let pos: [number, number];
   let approx = false;
   if (exact) {
