@@ -70,6 +70,7 @@ export default function Header() {
                 <div className="hidden md:flex h-10 items-center justify-center gap-7 font-semibold text-sm text-[#1E3A8A] md:order-2">
                     <Link href="/" className={navLinkStyles("/")}>{t("home")}</Link>
                     <Link href="/catalog" className={navLinkStyles("/catalog")}>{t("catalog")}</Link>
+                    <Link href="/map" className={navLinkStyles("/map")}>{t("map")}</Link>
                     <Link href="/about" className={navLinkStyles("/about")}>{t("about")}</Link>
                 </div>
 
@@ -160,6 +161,16 @@ export default function Header() {
                                 )}
                             >
                                 {t("catalog")}
+                            </Link>
+                            <Link
+                                href="/map"
+                                onClick={() => setIsMenuOpen(false)}
+                                className={cn(
+                                    "flex items-center px-4 py-3 rounded-xl text-lg font-bold transition-all cursor-pointer",
+                                    pathname === "/map" ? "bg-blue-50 text-[#F97316]" : "text-[#1E3A8A] hover:bg-slate-50"
+                                )}
+                            >
+                                {t("map")}
                             </Link>
                             <Link
                                 href="/about"

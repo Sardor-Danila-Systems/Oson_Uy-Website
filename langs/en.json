@@ -65,9 +65,25 @@
     "loading": "Loading…",
     "back": "Back"
   },
+  "Map": {
+    "metaTitle": "Uzbekistan New Developments Map — Residential Complexes by Region | Oson Uy",
+    "metaDescription": "Interactive map of Uzbekistan: how many residential complexes are in each region and where they are located.",
+    "title": "Uzbekistan new developments map",
+    "hint": "Hover a region to see how many complexes it has, click to open the region map.",
+    "regionHint": "Orange pins are residential complexes. Click a pin or a card to open the complex.",
+    "back": "Whole country",
+    "allRegions": "Regions",
+    "openCatalog": "Open in catalog",
+    "loading": "Loading…",
+    "negotiable": "Price on request",
+    "empty": "No complexes in this region yet.",
+    "legend": "More complexes — darker",
+    "approxNote": "Some pins are approximate (placed by district)"
+  },
   "Header": {
     "home": "Home",
     "catalog": "Catalog",
+    "map": "Map",
     "about": "About Us",
     "contact": "Contact",
     "brand": "Oson Uy",

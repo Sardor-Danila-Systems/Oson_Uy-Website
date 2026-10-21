@@ -65,9 +65,25 @@
     "loading": "Yuklanmoqda…",
     "back": "Orqaga"
   },
+  "Map": {
+    "metaTitle": "O'zbekiston yangi binolar xaritasi — viloyatlar bo'yicha TJM | Oson Uy",
+    "metaDescription": "O'zbekistonning interaktiv xaritasi: har bir viloyatda nechta turar-joy majmuasi bor va ular xaritada qayerda joylashgan.",
+    "title": "O'zbekiston yangi binolar xaritasi",
+    "hint": "Viloyatdagi TJM sonini ko'rish uchun ustiga olib boring, viloyat xaritasini ochish uchun bosing.",
+    "regionHint": "To'q sariq belgilar — turar-joy majmualari. TJMni ochish uchun belgi yoki kartani bosing.",
+    "back": "Butun mamlakat",
+    "allRegions": "Viloyatlar",
+    "openCatalog": "Katalogda ochish",
+    "loading": "Yuklanmoqda…",
+    "negotiable": "Narx kelishiladi",
+    "empty": "Bu viloyatda hozircha TJM yo'q.",
+    "legend": "TJM ko'p bo'lsa — to'qroq",
+    "approxNote": "Ba'zi belgilar taxminiy (tuman bo'yicha) ko'rsatilgan"
+  },
   "Header": {
     "home": "Bosh sahifa",
     "catalog": "Katalog",
+    "map": "Xarita",
     "about": "Biz haqimizda",
     "contact": "Aloqa",
     "brand": "Oson Uy",
