@@ -78,7 +78,14 @@
     "negotiable": "Narx kelishiladi",
     "empty": "Bu viloyatda hozircha TJM yo'q.",
     "legend": "TJM ko'p bo'lsa — to'qroq",
-    "approxNote": "Ba'zi belgilar taxminiy (tuman bo'yicha) ko'rsatilgan"
+    "zoomIn": "Yaqinlashtirish",
+    "zoomOut": "Uzoqlashtirish",
+    "reset": "Butun viloyatni ko'rsatish",
+    "openComplex": "TJMni ochish",
+    "close": "Yopish",
+    "gestureMouse": "Sichqoncha g'ildiragi — yaqinlashtirish, sudrash — xaritani siljitish",
+    "gestureTouch": "Ikki barmoq — yaqinlashtirish, bitta barmoq — siljitish",
+    "approxNote": "Och rangli belgilar — taxminiy"
   },
   "Header": {
     "home": "Bosh sahifa",
