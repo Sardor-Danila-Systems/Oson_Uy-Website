@@ -15,6 +15,7 @@ import { formatUzPhoneInput } from "@/lib/phone";
 import { minPricePerM2FromApiProject } from "@/lib/project-price";
 import { HomeFaqSection } from "@/components/home/HomeFaqSection";
 import DeveloperMarquee from "@/components/home/DeveloperMarquee";
+import { AsciiSkyline } from "@/components/home/AsciiSkyline";
 
 const REGION_VIDEOS: Record<string, string> = {
     "Tashkent City (г. Ташкент)": "/videos/tashkent.webm",
@@ -144,9 +145,12 @@ export default function HomeClient() {
 
                     <div className="absolute inset-0 bg-primary/70 mix-blend-multiply"></div>
                     <div className="absolute inset-0 bg-gradient-to-b from-primary/90 via-transparent to-slate-50"></div>
+
+                    {/* Residential complexes built from dots, rising along the bottom of the hero. */}
+                    <AsciiSkyline className="pointer-events-none absolute inset-x-0 bottom-0 h-44 w-full md:h-56 [mask-image:linear-gradient(to_top,black_75%,transparent_100%)]" />
                 </div>
 
-                <div className="relative z-10 mx-auto w-full max-w-5xl space-y-6 px-4 pb-6 pt-4 text-center md:space-y-10 md:pb-7 md:pt-6 lg:pt-8 group">
+                <div className="relative z-10 mx-auto w-full max-w-5xl space-y-6 px-4 pb-44 pt-4 text-center md:space-y-10 md:pb-56 md:pt-6 lg:pt-8 group">
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
