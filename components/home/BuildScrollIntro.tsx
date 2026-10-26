@@ -124,12 +124,6 @@ export function BuildScrollIntro() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const skip = () => {
-    const el = trackRef.current;
-    if (!el) return;
-    window.scrollTo({ top: el.offsetTop + el.offsetHeight, behavior: "smooth" });
-  };
-
   if (supported === false) return null;
 
   return (
@@ -175,14 +169,6 @@ export function BuildScrollIntro() {
           {t("introScroll")}
           <ArrowDown className="h-5 w-5 animate-bounce" />
         </div>
-
-        <button
-          type="button"
-          onClick={skip}
-          className="absolute right-4 top-20 z-10 cursor-pointer rounded-full border border-white/40 bg-slate-900/25 px-4 py-2 text-xs font-bold text-white backdrop-blur transition hover:bg-slate-900/45 md:right-8 md:top-24"
-        >
-          {t("introSkip")}
-        </button>
 
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1 bg-white/15">
           <div ref={barEl} className="h-full origin-left bg-[#F97316]" style={{ transform: "scaleX(0)" }} />
