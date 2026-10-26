@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, useScroll, useTransform } from "motion/react";
 import { FeaturedProjectsShowcase } from "@/components/home/FeaturedProjectsShowcase";
 import { LeadModal } from "@/components/custom/LeadModal";
 import { PROJECTS } from "@/lib/data";
@@ -56,6 +56,9 @@ export default function HomeClient() {
     const [activeLocation, setActiveLocation] = useState("Samarkand (Самаркандская обл.)");
     const videoSrc = REGION_VIDEOS[activeLocation] || REGION_VIDEOS["Samarkand (Самаркандская обл.)"];
 
+    // Parallax: the hero video drifts slower than the page as you scroll away.
+    const { scrollY } = useScroll();
+    const heroY = useTransform(scrollY, [0, 1000], [0, 150]);
 
     useEffect(() => {
         const fetchProjects = async () => {
@@ -136,13 +139,13 @@ export default function HomeClient() {
                             muted
                             playsInline
                             src={videoSrc}
-                            className="h-full w-full object-cover"
+                            style={{ y: heroY }}
+                            className="w-full h-full object-cover scale-110"
                         />
                     </AnimatePresence>
 
-                    {/* The picture stays crisp and uncropped; only a light shade sits behind the text. */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-slate-950/45 via-slate-950/10 via-60% to-transparent"></div>
-                    <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-b from-transparent to-slate-50"></div>
+                    <div className="absolute inset-0 bg-primary/70 mix-blend-multiply"></div>
+                    <div className="absolute inset-0 bg-gradient-to-b from-primary/90 via-transparent to-slate-50"></div>
                 </div>
 
                 <div className="relative z-10 mx-auto w-full max-w-5xl space-y-6 px-4 pb-6 pt-4 text-center md:space-y-10 md:pb-7 md:pt-6 lg:pt-8 group">

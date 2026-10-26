@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useMotionValueEvent, useScroll } from "motion/react";
 import { useTranslations } from "next-intl";
 import { ArrowDown } from "lucide-react";
@@ -16,6 +16,9 @@ function windowAt(p: number, a: number, b: number, c: number, d: number) {
   if (p <= c) return 1;
   return (d - p) / (d - c);
 }
+
+/** Set once the visitor has scrolled through the intro; it stays gone until the page is reloaded. */
+let introPlayed = false;
 
 const INTRO_MS = 2600;
 /** How far the build runs by itself when the page opens, before any scrolling. */
@@ -33,6 +36,9 @@ export function BuildScrollIntro() {
   // null until checked on the client; false means no WebGL, and the section is left out.
   const [supported, setSupported] = useState<boolean | null>(null);
   const [live, setLive] = useState(true);
+  const [gone, setGone] = useState(introPlayed);
+  // Where the hero sat on screen when the intro was removed, so the page can be put back exactly.
+  const handoff = useRef<{ el: Element; top: number } | null>(null);
   const trackRef = useRef<HTMLElement>(null);
   const progress = useRef(0);
   const scrolled = useRef(0);
@@ -89,6 +95,34 @@ export function BuildScrollIntro() {
     probe();
   }, []);
 
+  // Once the intro has scrolled completely out of view it is removed for good:
+  // no way back up to it, only a page reload plays it again.
+  useEffect(() => {
+    if (gone) return;
+    const check = () => {
+      const el = trackRef.current;
+      const next = el?.nextElementSibling;
+      if (!el || !next || introPlayed) return;
+      if (el.getBoundingClientRect().bottom < -4) {
+        handoff.current = { el: next, top: next.getBoundingClientRect().top };
+        introPlayed = true;
+        setGone(true);
+      }
+    };
+    window.addEventListener("scroll", check, { passive: true });
+    return () => window.removeEventListener("scroll", check);
+  }, [gone]);
+
+  useLayoutEffect(() => {
+    const h = handoff.current;
+    if (!gone || !h) return;
+    handoff.current = null;
+    // The page just got shorter by the height of the intro; scroll by the difference
+    // so the hero stays exactly where it was under the visitor's eyes.
+    const delta = h.el.getBoundingClientRect().top - h.top;
+    if (delta) window.scrollBy({ top: delta, behavior: "instant" as ScrollBehavior });
+  }, [gone]);
+
   // Stop drawing while the section is far off-screen; the last frame stays.
   useEffect(() => {
     const el = trackRef.current;
@@ -124,7 +158,7 @@ export function BuildScrollIntro() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (supported === false) return null;
+  if (supported === false || gone) return null;
 
   return (
     <section ref={trackRef} className="relative h-[330vh] w-full bg-[#9bb6e6] md:h-[380vh]" aria-label={t("introTitle")}>
