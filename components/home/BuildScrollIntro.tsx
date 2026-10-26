@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMotionValueEvent, useScroll } from "motion/react";
 import { useTranslations } from "next-intl";
 import { ArrowDown } from "lucide-react";
@@ -30,6 +30,9 @@ const INTRO_PROGRESS = 0.14;
  */
 export function BuildScrollIntro() {
   const t = useTranslations("Home");
+  // null until checked on the client; false means no WebGL, and the section is left out.
+  const [supported, setSupported] = useState<boolean | null>(null);
+  const [live, setLive] = useState(true);
   const trackRef = useRef<HTMLElement>(null);
   const progress = useRef(0);
   const scrolled = useRef(0);
@@ -74,6 +77,27 @@ export function BuildScrollIntro() {
     applyCaptions(v);
   });
 
+  useEffect(() => {
+    const probe = () => {
+      try {
+        const canvas = document.createElement("canvas");
+        setSupported(Boolean(canvas.getContext("webgl2") || canvas.getContext("webgl")));
+      } catch {
+        setSupported(false);
+      }
+    };
+    probe();
+  }, []);
+
+  // Stop drawing while the section is far off-screen; the last frame stays.
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el || !supported) return;
+    const io = new IntersectionObserver(([entry]) => setLive(entry?.isIntersecting ?? true), { rootMargin: "200px 0px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [supported]);
+
   // react-three-fiber can miss its first measurement when the canvas mounts
   // late (it is loaded on demand); a resize nudge makes it measure and draw.
   useEffect(() => {
@@ -106,13 +130,16 @@ export function BuildScrollIntro() {
     window.scrollTo({ top: el.offsetTop + el.offsetHeight, behavior: "smooth" });
   };
 
-  return (
-    <section ref={trackRef} className="relative h-[380vh] w-full bg-[#a9c3ee] md:h-[440vh]" aria-label={t("introTitle")}>
-      <div className="sticky top-0 h-svh w-full overflow-hidden">
-        <BuildScene progress={progress} className="!absolute inset-0 size-full" />
+  if (supported === false) return null;
 
-        {/* soft top shade keeps the header legible over the sky */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-slate-900/25 to-transparent" />
+  return (
+    <section ref={trackRef} className="relative h-[330vh] w-full bg-[#9bb6e6] md:h-[380vh]" aria-label={t("introTitle")}>
+      <div className="sticky top-0 h-svh w-full overflow-hidden">
+        <BuildScene progress={progress} active={live} className="!absolute inset-0 size-full" />
+
+        {/* soft shades keep the header and the captions legible over the scene */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-slate-900/15 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-slate-950/55 via-slate-950/20 to-transparent" />
 
         <div ref={titleEl} className="pointer-events-none absolute inset-x-0 top-24 px-5 text-center md:top-28">
           <p className="text-xs font-bold uppercase tracking-[0.3em] text-white/90 drop-shadow md:text-sm">Oson Uy</p>
