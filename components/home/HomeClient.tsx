@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { AnimatePresence, motion, useScroll, useTransform } from "motion/react";
+import { motion } from "motion/react";
 import { FeaturedProjectsShowcase } from "@/components/home/FeaturedProjectsShowcase";
 import { LeadModal } from "@/components/custom/LeadModal";
 import { PROJECTS } from "@/lib/data";
@@ -16,22 +16,6 @@ import { minPricePerM2FromApiProject } from "@/lib/project-price";
 import { HomeFaqSection } from "@/components/home/HomeFaqSection";
 import DeveloperMarquee from "@/components/home/DeveloperMarquee";
 import { AsciiSkyline } from "@/components/home/AsciiSkyline";
-
-const REGION_VIDEOS: Record<string, string> = {
-    "Tashkent City (г. Ташкент)": "/videos/tashkent.webm",
-    "Tashkent Region (Ташкентская обл.)": "/videos/tashkent.webm",
-    "Samarkand (Самаркандская обл.)": "/videos/samarkand.webm",
-    "Bukhara (Бухарская обл.)": "/videos/bukhara.webm",
-    "Andijan (Андижанская обл.)": "/videos/andijan.webm",
-    "Fergana (Ферганская обл.)": "/videos/fergana.webm",
-    "Navoiy (Навоийская обл.)": "/videos/navoiy.webm",
-    "Kashkadarya (Кашкадарьинская обл.)": "/videos/kashkadarya.webm",
-    "Khorezm (Хорезмская обл.)": "/videos/khorezm.webm",
-    "Jizzakh (Джизакская обл.)": "/videos/jizzakh.webm",
-    "Namangan (Наманганская обл.)": "/videos/tashkent.webm",
-    "Surkhandarya (Сурхандарьинская обл.)": "/videos/tashkent.webm",
-    "Syrdarya (Сырдарьинская обл.)": "/videos/tashkent.webm",
-};
 
 export default function HomeClient() {
     const t = useTranslations("Home");
@@ -53,12 +37,6 @@ export default function HomeClient() {
     const [consultName, setConsultName] = useState("");
     const [consultPhone, setConsultPhone] = useState("+998");
     const [consultProjectId, setConsultProjectId] = useState<number | null>(null);
-    const [activeLocation, setActiveLocation] = useState("Samarkand (Самаркандская обл.)");
-    const videoSrc = REGION_VIDEOS[activeLocation] || REGION_VIDEOS["Samarkand (Самаркандская обл.)"];
-
-    // Parallax: the hero video drifts slower than the page as you scroll away.
-    const { scrollY } = useScroll();
-    const heroY = useTransform(scrollY, [0, 1000], [0, 150]);
 
     useEffect(() => {
         const fetchProjects = async () => {
@@ -126,24 +104,8 @@ export default function HomeClient() {
         <div className="-mt-16 flex min-h-screen w-full flex-col">
             <section className="relative flex min-h-[98vh] items-center justify-center overflow-hidden pt-20 md:h-[92vh] md:pt-12 lg:pt-14">
                 <div className="absolute inset-0 z-0">
-                    <AnimatePresence mode="wait">
-                        <motion.video
-                            key={videoSrc}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 1 }}
-                            autoPlay
-                            loop
-                            muted
-                            playsInline
-                            src={videoSrc}
-                            style={{ y: heroY }}
-                            className="w-full h-full object-cover scale-110"
-                        />
-                    </AnimatePresence>
-
-                    <div className="absolute inset-0 bg-primary/70 mix-blend-multiply"></div>
+                    <div className="absolute inset-0 bg-primary"></div>
+                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(255,255,255,0.14),transparent_60%)]"></div>
                     <div className="absolute inset-0 bg-gradient-to-b from-primary/90 via-transparent to-slate-50"></div>
 
                     {/* Residential complexes built from dots, rising along the bottom of the hero. */}
@@ -173,10 +135,7 @@ export default function HomeClient() {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.4, duration: 0.6 }}
                     >
-                        <FilterBar
-                            translations={filterBarTranslations}
-                            onLocationChange={(loc) => setActiveLocation(loc)}
-                        />
+                        <FilterBar translations={filterBarTranslations} />
                     </motion.div>
                 </div>
             </section>
