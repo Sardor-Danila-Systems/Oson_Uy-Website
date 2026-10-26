@@ -97,6 +97,17 @@
     "cabinetCta": "Mening kvartiram"
   },
   "Home": {
+    "introTitle": "Yangi uyingiz qanday qurilishini kuzating",
+    "introScroll": "Pastga suring",
+    "introSkip": "O'tkazib yuborish",
+    "introStep1": "Poydevor quyilmoqda",
+    "introStep1Text": "Maydon o'ralgan, texnika kirib keldi, karkas boshlanmoqda.",
+    "introStep2": "Karkas o'smoqda",
+    "introStep2Text": "Qavatma-qavat: avval beton, so'ng fasad oynalari.",
+    "introStep3": "Fasad to'liq oynalandi",
+    "introStep3Text": "Kranlar oxirgi qavatlarni tugatmoqda, topshirish yaqin.",
+    "introDone": "Uy topshirildi. Kalitlar sizda",
+    "introDoneText": "O'z TJMingizni tanlang",
     "heroLine1": "Oson",
     "heroAccent": "Uy",
     "heroLine2": "Sizning kvartirangizga qadam",

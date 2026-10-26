@@ -97,6 +97,17 @@
     "cabinetCta": "My apartment"
   },
   "Home": {
+    "introTitle": "Watch your new home go up",
+    "introScroll": "Scroll",
+    "introSkip": "Skip",
+    "introStep1": "Laying the foundation",
+    "introStep1Text": "The site is fenced, machinery moves in, the frame begins.",
+    "introStep2": "The frame rises",
+    "introStep2Text": "Floor by floor: concrete first, the glass facade right behind it.",
+    "introStep3": "The facade closes in",
+    "introStep3Text": "Cranes finish the last floors, handover is close.",
+    "introDone": "Built. The keys are yours",
+    "introDoneText": "Pick your complex",
     "heroLine1": "Oson",
     "heroAccent": "Uy",
     "heroLine2": "Your step to a new home",

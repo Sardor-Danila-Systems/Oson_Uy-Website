@@ -15,6 +15,7 @@ import { formatUzPhoneInput } from "@/lib/phone";
 import { minPricePerM2FromApiProject } from "@/lib/project-price";
 import { HomeFaqSection } from "@/components/home/HomeFaqSection";
 import DeveloperMarquee from "@/components/home/DeveloperMarquee";
+import { BuildScrollIntro } from "@/components/home/BuildScrollIntro";
 
 const REGION_VIDEOS: Record<string, string> = {
     "Tashkent City (г. Ташкент)": "/videos/tashkent.webm",
@@ -123,6 +124,7 @@ export default function HomeClient() {
 
     return (
         <div className="-mt-16 flex min-h-screen w-full flex-col">
+            <BuildScrollIntro />
             <section className="relative flex min-h-[98vh] items-center justify-center overflow-hidden pt-20 md:h-[92vh] md:pt-12 lg:pt-14">
                 <div className="absolute inset-0 z-0">
                     <AnimatePresence mode="wait">
