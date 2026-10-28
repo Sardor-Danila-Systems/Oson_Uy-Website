@@ -87,6 +87,13 @@
     "gestureTouch": "Pinch to zoom, drag to move the map",
     "approxNote": "Light orange pins are approximate"
   },
+  "NotFound": {
+    "metaTitle": "Page not found",
+    "title": "This page hasn't been built yet",
+    "text": "The address may have changed, or the complex may already be finished. Head back home or browse the catalog.",
+    "home": "Back home",
+    "catalog": "Open catalog"
+  },
   "Header": {
     "home": "Home",
     "catalog": "Catalog",

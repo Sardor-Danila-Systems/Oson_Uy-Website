@@ -87,6 +87,13 @@
     "gestureTouch": "Ikki barmoq — yaqinlashtirish, bitta barmoq — siljitish",
     "approxNote": "Och rangli belgilar — taxminiy"
   },
+  "NotFound": {
+    "metaTitle": "Sahifa topilmadi",
+    "title": "Bu sahifa hali qurilmagan",
+    "text": "Manzil o'zgargan yoki TJM allaqachon topshirilgan bo'lishi mumkin. Bosh sahifaga yoki katalogga qaytamiz.",
+    "home": "Bosh sahifaga",
+    "catalog": "Katalogga"
+  },
   "Header": {
     "home": "Bosh sahifa",
     "catalog": "Katalog",
