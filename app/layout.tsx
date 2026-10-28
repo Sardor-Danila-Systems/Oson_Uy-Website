@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { BRAND_IMAGE_ICON_PATH, BRAND_IMAGE_OG_PATH } from "@/lib/brand";
 import { absoluteUrl, getSiteUrl } from "@/lib/site";
 import YandexMetrika from "@/components/YandexMetrika";
+import SiteSplash from "@/components/custom/SiteSplash";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -83,8 +84,14 @@ export default async function RootLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={cn("font-sans", geist.variable)}>
+    <html lang={locale} className={cn("font-sans", geist.variable)} suppressHydrationWarning>
       <head>
+        {/* Decide before first paint whether the opening splash plays: once per session, never in the admin, cabinet or 3D viewer. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var d=document.documentElement,p=location.pathname;var top=p.split('/')[1];var skip=top==='admin'||top==='cabinet'||top==='3d';var seen=${process.env.NODE_ENV === "production" ? "sessionStorage.getItem('oson-splash')" : "false"};if(skip||seen){d.dataset.splash='off'}else{d.dataset.splash='on';sessionStorage.setItem('oson-splash','1')}}catch(e){document.documentElement.dataset.splash='off'}})()`,
+          }}
+        />
         {/* Speed up first image (LCP): warm up the image CDN + API connections */}
         <link
           rel="preconnect"
@@ -96,6 +103,7 @@ export default async function RootLayout({
       <body>
         <YandexMetrika />
         <NextIntlClientProvider locale={locale} messages={messages}>
+          <SiteSplash />
           {children}
         </NextIntlClientProvider>
       </body>
