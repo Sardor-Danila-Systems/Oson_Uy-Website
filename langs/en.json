@@ -94,6 +94,9 @@
     "home": "Back home",
     "catalog": "Open catalog"
   },
+  "Splash": {
+    "tagline": "Building your new home"
+  },
   "Header": {
     "home": "Home",
     "catalog": "Catalog",

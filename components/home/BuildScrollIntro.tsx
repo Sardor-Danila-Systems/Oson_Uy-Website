@@ -146,15 +146,24 @@ export function BuildScrollIntro() {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) return;
     let raf = 0;
-    const start = performance.now();
-    const tick = (now: number) => {
-      const k = Math.min(1, (now - start) / INTRO_MS);
-      autoRef.current = INTRO_PROGRESS * (1 - Math.pow(1 - k, 3));
-      write(autoRef.current);
-      if (k < 1) raf = requestAnimationFrame(tick);
+    const run = () => {
+      const start = performance.now();
+      const tick = (now: number) => {
+        const k = Math.min(1, (now - start) / INTRO_MS);
+        autoRef.current = INTRO_PROGRESS * (1 - Math.pow(1 - k, 3));
+        write(autoRef.current);
+        if (k < 1) raf = requestAnimationFrame(tick);
+      };
+      raf = requestAnimationFrame(tick);
     };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+    // While the site's opening splash is still on screen, hold the self-playing part back.
+    const waiting = document.documentElement.dataset.splash === "on";
+    if (waiting) window.addEventListener("oson-splash-end", run, { once: true });
+    else run();
+    return () => {
+      window.removeEventListener("oson-splash-end", run);
+      cancelAnimationFrame(raf);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

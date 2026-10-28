@@ -94,6 +94,9 @@
     "home": "Bosh sahifaga",
     "catalog": "Katalogga"
   },
+  "Splash": {
+    "tagline": "Yangi uyingizni quryapmiz"
+  },
   "Header": {
     "home": "Bosh sahifa",
     "catalog": "Katalog",
